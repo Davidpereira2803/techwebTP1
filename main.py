@@ -1,4 +1,4 @@
-import book_management.database as db
+import uvicorn
 
-
-print(db.book_storage)
+if __name__ == '__main__':
+    uvicorn.run("book_management.app:app", log_level = "info", port = 8000)

@@ -1,16 +1,14 @@
-book_storage = {
-    "shelf_1":[
+book_storage = [
         {
-            "name": "jdjd",
+            "name": "Book1",
             "id": "jdjd",
             "author":"",
             "editor":""
         },
         {
-            "name": "jdjd",
+            "name": "Book2",
             "id": "jdjd",
             "author":"",
             "editor":""
-        }
-    ] 
-}
+        } 
+]
