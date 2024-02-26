@@ -2,13 +2,13 @@ book_storage = [
         {
             "name": "Book1",
             "id": "jdjd",
-            "author":"",
-            "editor":""
+            "author":"dee",
+            "editor":"2"
         },
         {
             "name": "Book2",
             "id": "jdjd",
-            "author":"",
-            "editor":""
+            "author":"   dede         ",
+            "editor":"ded"
         } 
 ]

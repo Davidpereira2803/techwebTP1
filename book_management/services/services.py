@@ -1,34 +1,54 @@
-from book_management.database import book_storage
+from pydantic import ValidationError
 
-def get_all_books():
-    return book_storage
+from book_management.database import book_storage
+from book_management.book.book import Book, CheckBook
+
+def get_all_books() -> list[Book]:
+    try:
+        books  = [Book.model_validate(data) for data in book_storage]
+        for book in book_storage:
+            CheckBook.check_book(book)
+    except ValidationError as er:
+        return er
+    return books
 
 def get_number_of_books():
-    length = len(book_storage)
+    try:
+        books  = [Book.model_validate(data) for data in book_storage]
+        for book in book_storage:
+            CheckBook.check_book(book)
+    except ValidationError as er:
+        return er
+    length = len(books)
     if length == 0:
         return f'The shelf is empty!'
     elif length == 1:
         return f'There is {length} book on the shelf!'
     return f'There are {length} books on the shelf!'
 
-def add_book(new_book):
-    book_storage.append(new_book)
+def add_book(new_book: Book):
+    try:
+        book = [Book.model_validate(new_book)]
+        CheckBook.check_book(new_book)
+        book_storage.append(new_book)
+    except ValidationError as er:
+        return er
     return new_book
 
 def delete_book_by_name(name: str):
-    new_book_storage = []
-    for book in book_storage:
-        if book['name'] != name:
-            new_book_storage.append(book)
-    return new_book_storage
+    for i, book in enumerate(book_storage):
+        if book['name'] == name:
+            book_storage.pop(i)
+    return book_storage
 
-def delete_book(book):
-    new_book_storage = []
-    for b in book_storage:
-        if b != book:
-            new_book_storage.append(b)
-    print(new_book_storage)
-    return new_book_storage
+def delete_book(book_to_delete: Book):
+    for i, book in enumerate(book_storage):
+        print(f'book: {book}')
+        print(f'book: {book_to_delete}')
+        if book == book_to_delete:
+            print(book)
+            book_storage.pop(i)
+    return book_storage
 
 def book_to_edit(name):
     try:
