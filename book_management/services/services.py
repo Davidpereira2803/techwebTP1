@@ -4,7 +4,12 @@ def get_all_books():
     return book_storage
 
 def get_number_of_books():
-    return len(book_storage)
+    length = len(book_storage)
+    if length == 0:
+        return f'The shelf is empty!'
+    elif length == 1:
+        return f'There is {length} book on the shelf!'
+    return f'There are {length} books on the shelf!'
 
 def add_book(new_book):
     book_storage.append(new_book)
@@ -60,11 +65,4 @@ def edit_book(book, name: str, id, autor: str, editor: str):
     }
     book_storage = [] # i cannot assign a value to book_storage
     add_book(new_book)
-    return book_storage
-
-     
-
-# if already once triggered it will still add and count more books -> to correct
-def get_all_books_amount():
-    add_book(f'There are {str(get_number_of_books())} books in the shelf!')
-    return  get_all_books()
+    return book_storage  

@@ -5,11 +5,19 @@ import book_management.services.services as services
 
 router = APIRouter(prefix="/books" , tags=["Books"])
 
-@router.get('/')
+@router.get('/all')
 def get_all_books():
-    books = services.get_all_books_amount()
+    books = services.get_all_books()
     return JSONResponse(
         content = books,
+        status_code = 200
+    )
+
+@router.get('/count')
+def get_book_count():
+    count = services.get_number_of_books()
+    return JSONResponse(
+        content = count,
         status_code = 200
     )
 
