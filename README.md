@@ -1,17 +1,24 @@
 # TP1
-techwebtp1
-    -> main.py
-    -> book_management
-        -> app.py
-        -> database.py
-        -> book
-            -> book.py
-        -> routes 
-            -> routes.py
-        -> services 
-            -> services.py
+
+techwebtp1/
+│
+├── book_management/
+|   ├── book/
+│   │   └── book.py
+│   ├── routes/
+│   │   └── routes.py
+│   ├── services/
+│   │   └── services.py
+|   ├── database.py
+│   └── app.py
+│
+├── main.py
+├── README.md
+└── requirements.txt
 
 # Routes
+
+
 GET:
     -> '/all'
     -> '/count'
