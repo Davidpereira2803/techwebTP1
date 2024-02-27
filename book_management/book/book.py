@@ -9,6 +9,16 @@ class Book(BaseModel):
 class CheckBook():
     def check_book(book):
         if(book['name'].isspace() or book['author'].isspace() or book['editor'].isspace()):
-            raise ValueError('Name, Author and Editor cannot be only spaces!')
+            print(book['name'].isspace())
+            print(book['author'].isspace())
+
+            print(book['editor'].isspace())
+
+            print(book['id'].isspace())
+
+            return None
+        return True
+    
+
     
     

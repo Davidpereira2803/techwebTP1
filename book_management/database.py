@@ -8,7 +8,7 @@ book_storage = [
         {
             "name": "Book2",
             "id": "jdjd",
-            "author":"   dede         ",
+            "author":"dede",
             "editor":"ded"
         } 
 ]

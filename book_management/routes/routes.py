@@ -32,12 +32,29 @@ def add_new_book(name: str, id, author: str, editor: str):
         'author': author,
         'editor': editor,
     }
+    try:
+        book = Book.model_validate(new_book)
+        if CheckBook.check_book(new_book) is None:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Invalid book!",
+            )
+    except ValidationError: 
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid book!",
+        )
     services.add_book(new_book)
-    return JSONResponse(new_book)
+    return JSONResponse(book.model_dump())
 
 @router.post('/delete/name')
 def delete_book_by_name(book_name: str):
     updated_book_storage = services.delete_book_by_name(book_name)
+    if updated_book_storage is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="No book found with this NAME!",
+        )
     return JSONResponse(updated_book_storage)
 
 @router.post('/delete/book')
@@ -49,15 +66,47 @@ def delete_book(name, id, author, editor):
         'editor': editor
     }
     try:
-        book_to_delete  = [Book.model_validate(data)]
+        Book.model_validate(data)
         CheckBook.check_book(data)
-    except ValidationError as er:
-        return er
-    updated_book_storage = services.delete_book(book_to_delete)
+    except ValidationError:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid book!",
+        )
+    updated_book_storage = services.delete_book(data)
+    if updated_book_storage is None:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="No such book found!",
+        )
     return JSONResponse(updated_book_storage)
 
 @router.post('/edit')
-def edit(book_name: str, name, id, autor, editor):
-    services.edit_book(services.book_to_edit(book_name), name, id, autor, editor)
-    return JSONResponse(services.book_storage)
+def edit(book_name: str, name, id, author, editor):
+    new_book = {
+        'name': name,
+        'id': id,
+        'author': author,
+        'editor': editor
+    }
+    if services.get_book_by_name(book_name) == None:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="No book found with this NAME!",
+        )
+    try:
+        book = Book.model_validate(new_book)
+        if CheckBook.check_book(new_book) is None:
+            print(f'{new_book["author"]},{new_book["name"]},{new_book["id"]},{new_book["editor"]}')
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Invalid bookh!",
+            )
+    except ValidationError: 
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid book!",
+        )
+    update = services.edit_book(book_name, new_book)
+    return JSONResponse(update)
     
