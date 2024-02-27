@@ -16,10 +16,10 @@ techwebtp1/
 ├── main.py  
 ├── README.md  
 └── requirements.txt  
+```
 
 # Routes
-
-
+```
 GET:
     -> '/all'
     -> '/count'
@@ -28,4 +28,4 @@ POST:
     -> '/delete/name'
     -> '/delete/book'
     -> '/edit'
-        
+```    
