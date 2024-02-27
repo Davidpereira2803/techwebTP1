@@ -1,13 +1,21 @@
 # TP1
 
-techwebtp1/  
-│  
-├── book_management/  
+techwebtp1/
+
+|
+
+├── book_management/ 
+
 |   ├── book/
+
 │   │   └── book.py
+
 │   ├── routes/
+
 │   │   └── routes.py
+
 │   ├── services/
+
 │   │   └── services.py
 |   ├── database.py
 │   └── app.py
