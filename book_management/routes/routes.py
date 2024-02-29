@@ -57,30 +57,6 @@ def delete_book_by_name(book_name: str):
         )
     return JSONResponse(updated_book_storage)
 
-@router.post('/delete/book')
-def delete_book(name, id, author, editor):
-    data = {
-        'name': name,
-        'id': id,
-        'author': author,
-        'editor': editor
-    }
-    try:
-        Book.model_validate(data)
-        CheckBook.check_book(data)
-    except ValidationError:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Invalid book!",
-        )
-    updated_book_storage = services.delete_book(data)
-    if updated_book_storage is None:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="No such book found!",
-        )
-    return JSONResponse(updated_book_storage)
-
 @router.post('/edit/book_name')
 def edit(book_name: str, name, id, author, editor):
     new_book = {

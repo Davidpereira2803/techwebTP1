@@ -47,18 +47,7 @@ def delete_book_by_name(name: str):
         return None
     else:
         return book_storage
-
-def delete_book(book_to_delete: Book):
-    book_not_found = True
-    for i, book in enumerate(book_storage):
-        if book == book_to_delete:
-            book_not_found = False
-            book_storage.pop(i)
-    if book_not_found:
-        return None
-    else:
-        return book_storage
-
+    
 def edit_book(book_to_edit: str, book):
     delete_book_by_name(book_to_edit)
     add_book(book)
