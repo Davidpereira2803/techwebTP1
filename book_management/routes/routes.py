@@ -47,7 +47,7 @@ def add_new_book(name: str, id, author: str, editor: str):
     services.add_book(new_book)
     return JSONResponse(book.model_dump())
 
-@router.post('/delete/{book_name}')
+@router.post('/delete/book_name')
 def delete_book_by_name(book_name: str):
     updated_book_storage = services.delete_book_by_name(book_name)
     if updated_book_storage is None:
@@ -81,7 +81,7 @@ def delete_book(name, id, author, editor):
         )
     return JSONResponse(updated_book_storage)
 
-@router.post('/edit/{book_name}')
+@router.post('/edit/book_name')
 def edit(book_name: str, name, id, author, editor):
     new_book = {
         'name': name,
