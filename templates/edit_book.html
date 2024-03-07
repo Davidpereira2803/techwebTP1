@@ -1,0 +1,52 @@
+{% extends "empty_page.html" %}
+
+{% block content %}
+
+<h1>Edit a book from the library</h1>
+
+<form action="/books/edit" method="post">
+
+    <h2>Book to Edit</h2>
+
+    <div class="form-group">
+        <label for="book_name_edit">Book name</label>
+        <input type="text" class="form-control" id="book_name_edit" name="name_edit" placeholder="Introduction to Algorithms" />
+    </div>
+
+    <h2>New Values of the Book</h2>
+
+    <div class="form-group">
+        <label for="book_name">Book name</label>
+        <input type="text" class="form-control" id="book_name"
+               name="name" placeholder="Introduction to Algorithms" />
+    </div>
+
+    <div class="form-group">
+        <label for="book_id">Book ID</label>
+        <input type="text" class="form-control" id="book_id"
+               name="id" placeholder="978-0262510875" />
+    </div>
+
+    <div class="form-group">
+        <label for="book_author">Book Author</label>
+        <input type="text" class="form-control" id="book_author"
+               name="id" placeholder="Harold Abelson,..." />
+    </div>
+
+    <div class="form-group">
+        <label for="book_editor">Book Editor</label>
+        <input type="text" class="form-control" id="book_editor"
+               name="id" placeholder="MIT Press" />
+    </div>
+
+
+
+    <button type="submit" class="btn btn-success my-4">Delete Book</button>
+
+</form>
+
+<div>
+    <a class="btn btn-outline-dark mx-2" href="/books/all">Back</a>
+</div>
+
+{% endblock %}

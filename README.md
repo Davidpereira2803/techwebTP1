@@ -30,11 +30,9 @@ GET:
 POST:
     -> '/add'
         -> add_new_book(name: str, id, author: str, editor: str)
-    -> '/delete/name'
+    -> '/delete/book_name'
         -> delete_book_by_name(book_name: str)
-    -> '/delete/book'
-        -> delete_book(name, id, author, editor)
-    -> '/edit'
+    -> '/edit/book_name'
         -> edit(book_name: str, name, id, author, editor)
 ```    
 # Functions
@@ -48,19 +46,25 @@ def get_all_books()
 def get_book_count()
 
 # Add a new book to the library
-# Parameter: name, id, author, editor -> from the book to add
-def add_new_book(name: str, id, author: str, editor: str)
+# Parameter: new_book: Book 
+def add_new_book(new_book: Book)
 
 # delete a book from the library by the name
-# Parameter: name-> from the book to delete
-def delete_book_by_name(book_name: str)
-
-# delete a book from the library 
-# Parameter: name, id, author, editor -> from the book to delete
-def delete_book(name, id, author, editor)
+# Parameter: name 
+def delete_book_by_name(name: str)
 
 # edit an existing book from the library
-# Parameter: book_name -> from book to edit, {name, id, author, editor} -> new parameters of the book
-def edit(book_name: str, name, id, author, editor)
+# Parameter: book_name, book
+def edit(book_name: str, book: Book)
+
+# get book by name (Help function)
+# Parameter: book_name
+def get_book_by_name(book_name: str)
 
 ```
+# Description
+
+The program allows one to get all the books in the library ('/all'), to get the number of books in the library ('/count').
+Next, it allows to add new books to the library ('/add'), to delete existing books from the library ('/delete/book_name') and to edit existing books from the library ('/edit/book_name').
+
+The program gives some HTTP errors if the parameters are wrong or if for instance one wants to delete or edit a book that is not in the library.
