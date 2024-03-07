@@ -36,7 +36,7 @@ def ask_to_add_new_book(request: Request):
     )
 
 @router.post('/add')
-def add_new_book(name: str, id, author: str, editor: str):
+def add_new_book(name: Annotated[str, Form()], id: Annotated[str, Form()], author: Annotated[str, Form()], editor: Annotated[str, Form()]):
     new_book = {
         'name': name,
         'id': id,
