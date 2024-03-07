@@ -1,8 +1,12 @@
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
+
+
 
 from book_management.routes.routes import router
 
 app = FastAPI(title = "My Library")
+app.mount("/static", StaticFiles(directory="static"))
 app.include_router(router)
 
 @app.on_event('startup')
