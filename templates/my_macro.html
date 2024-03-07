@@ -1,0 +1,16 @@
+{% macro show_book(name, id, author, editor) %}
+    <tr>
+        <td>{{ name }}</td>
+        
+        <td>
+            {{ id }}
+        </td>
+
+        <td>
+            {{ author }}
+        </td>
+        <td>
+            {{ editor }}
+        </td>
+    </tr>
+{% endmacro %}

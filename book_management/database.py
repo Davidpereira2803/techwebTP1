@@ -1,4 +1,4 @@
-database = {
+book_storage = {
     "books": [
         {
             "name": "Structure and Interpretation of Computer Programs",
