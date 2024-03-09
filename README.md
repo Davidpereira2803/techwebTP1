@@ -1,5 +1,5 @@
 # TP1
-The project is structure like the following:
+The project is structured like the following:
 
 ```
 techwebtp1/  

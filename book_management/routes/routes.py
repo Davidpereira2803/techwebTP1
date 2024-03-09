@@ -90,7 +90,7 @@ def edit(book_name: Annotated[str, Form()], name: Annotated[str, Form()], id: An
         'author': author,
         'editor': editor
     }
-    if services.get_book_by_name(book_name) == None:
+    if services.get_book_by_name(book_name) == None:    
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="No book found with this NAME!",
@@ -109,4 +109,6 @@ def edit(book_name: Annotated[str, Form()], name: Annotated[str, Form()], id: An
         )
     services.edit_book(book_name, book)
     return RedirectResponse(url="/books/all", status_code=302)
+
+
     
