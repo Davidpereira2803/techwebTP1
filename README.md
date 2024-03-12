@@ -117,6 +117,7 @@ get_book_by_name(book_name: str):
 
 The project has a file 'styles.css' to style the HTMl templates, but it also uses BOOTSTRAP for the styling. The site is divided into 9 html files, where 3 of them are error pages. 
 
+```
 ## books.html
 
 Contains the skeleton of the library database
@@ -152,6 +153,8 @@ Contains the skeleton of the 404 Error -- Not Found
 ## 422.html
 
 Contains the skeleton of the 422 Error -- Unprocessable Entity
+
+```
 
 # Description
 
