@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, status, Request, Form
+from fastapi import APIRouter, HTTPException, status, Request, Form, Depends
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 from pydantic import ValidationError
@@ -19,14 +19,6 @@ def get_all_books(request: Request):
     return templates.TemplateResponse(
         "books.html",
         context={'request': request, 'books': books, 'count': count}
-    )
-
-@router.get('/count')
-def get_book_count():
-    count = services.get_number_of_books()
-    return JSONResponse(
-        content = count,
-        status_code = 200
     )
 
 @router.get('/add')
@@ -51,7 +43,7 @@ def add_new_book(name: Annotated[str, Form()], id: Annotated[str, Form()], autho
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Invalid book!",
             )
-    except ValidationError: 
+    except ValidationError as er: 
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Invalid book!",

@@ -25,3 +25,7 @@ def custom_404_redirection(request: Request, exception: HTTPException):
 @app.exception_handler(400)
 def custom_400_redirection(request: Request, exception: HTTPException):
     return templates.TemplateResponse("errors/400.html", {"request": request}, status_code=400)
+
+@app.exception_handler(422)
+def custom_422_redirection(request: Request, exception: HTTPException):
+    return templates.TemplateResponse("errors/422.html", {"request": request}, status_code=422)
