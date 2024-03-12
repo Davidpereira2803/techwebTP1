@@ -15,9 +15,10 @@ templates = Jinja2Templates(directory="templates")
 @router.get('/all')
 def get_all_books(request: Request):
     books = services.get_all_books()
+    count = services.get_number_of_books()
     return templates.TemplateResponse(
         "books.html",
-        context={'request': request, 'books': books}
+        context={'request': request, 'books': books, 'count': count}
     )
 
 @router.get('/count')
