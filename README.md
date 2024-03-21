@@ -35,7 +35,7 @@ techwebtp1/
 ```
 
 # Routes
-These are the HTTP routes used for the functions of the project:
+Voila les routes HTTP du projet:
 ```
 GET:
     -> '/all'
@@ -55,104 +55,105 @@ POST:
         -> edit(book_name: Annotated[str, Form()], name: Annotated[str, Form()], id: Annotated[str, Form()], author: Annotated[str, Form()], editor: Annotated[str, Form()])
 ```    
 # Functions related to the routes
-These are the functions related to the routes(GET,POST)
+Voici les fonctions des routes(GET,POST)
 ```
-# Get all books in the library
+# Get tout les livres dans la librairie
 # Parameter: /
 def get_all_books()
 
-# Request to add new book
+# Demande pour ajouter un nouveau livre
 # Parameter: request
 ask_to_add_new_book(request: Request)
 
-# Add a new book to the library
+# Ajouter un nouveau livre
 # Parameter: name, id, author, editor 
 def add_new_book(name: Annotated[str, Form()], id: Annotated[str, Form()], author: Annotated[str, Form()], editor: Annotated[str, Form()])
 
-# Request to delete a book
+# Demande pour effacer un livre
 # Parameter: request
 ask_to_delete_book(request: Request)
 
-# delete a book from the library by the name
+# Effacer un livre
 # Parameter: book_name 
 def delete_book_by_name(book_name: Annotated[str, Form()])
 
-# Request to edit a book
+# Demande pour editer un livre
 # Parameter: request
 ask_to_edit_book(request: Request)
 
-# edit an existing book from the library
+# Editer un livre de la librarie avec le nom du parametre book_name
 # Parameter: book_name, name, id, author, editor
 def edit(book_name: Annotated[str, Form()], name: Annotated[str, Form()], id: Annotated[str, Form()], author: Annotated[str, Form()], editor: Annotated[str, Form()])
 ```
 
 # Functions related to the services
 ```
-# Get all books in the database and return a list of Book
+# Get tout les livres de la database et return une liste de livre
 # Parameter: /
 get_all_books() -> list[Book]:
 
-# Count the number of books in the database and return a text with the number
+# Compter le nombre de livres dans la database et return un String avec le nombre
 # Parameter: /
 get_number_of_books():
 
-# Append a new book to the database
+# Ajouter un nouveau livre à la database
 # Parameter: new_book
 add_book(new_book: Book):
 
-# Delete a book with the given name passed as parameter
+# Effacer un livre avec le nom passer comme parametre
 # Parameter: name
 delete_book_by_name(name: str):
 
-# Edit the book with the given name passed as parameter, replace it with the new book passed as parameter
+# Effacer le livre avec le nom passer comme parametre, et ajouter le avec le nouveau livre passer comme paramtre
 # Parameter: book_to_edit, book
 edit_book(book_to_edit: str, book: Book):
 
-# Get the book that matches the parameter and return it
+# Get le livre avec le nom passer comme paramtere
 # Parameter: book_name
 get_book_by_name(book_name: str):
 ```
 
 # Templates
 
-The project has a file 'styles.css' to style the HTMl templates, but it also uses BOOTSTRAP for the styling. The site is divided into 9 html files, where 3 of them are error pages. 
+Le projet a un fichier 'styles.css' pour styler les templates HTML, deplus on utilise BOOTSTRAP aussi pour le style. Le site est divise en 9 fichier html, ou 3 sont des pages d'erreurs.
+
 
 ```
 ## books.html
 
-Contains the skeleton of the library database
+Contient le skeleton de la database de la librairie 
 
 ## delete_book.html
 
-Contains the skeleton of the delete function, with one textfield for the book name to delete
+Contient le skeleton de la function d'effacer, avec une entree text pour le nom du livre à effacer
 
 ## edit_book.html
 
-Contains the skeleton of the edit function, with one textfield for the book name to edit and the textfields to input the new version of the book
+Contient le skeleton pour la fonction edit, avec une entree text pour le nom du livre à editer et les entrees pour le nouveu livre
 
 ## new_book.html
 
-Contains the skeleton of the add function, with the textfields to input the new book
+Contient le skeleton de la fonction add, avec les entrees text pour le nouveau livre
 
 ## empty_page.html
 
-Contains the HTML skeleton of the site
+Contient le skeleton HTML du site
 
 ## my_macro.html
 
-Contains the macro for show_book and show_book_count, to display the values of the books in the database, and the number of books in the database
+Contient le macro pour show_book et show_book_count, pour montrer les valeurs des livres dans la database et le nombre de livres dans la database
 
 ## 400.html
 
-Contains the skeleton of the 400 Error -- Bad Request page
+Contient le skeleton pour la page d'erreur: 400 Error -- Bad Request page
 
 ## 404.html
 
-Contains the skeleton of the 404 Error -- Not Found
+Contient le skeleton pour la page d'erreur: 404 Error -- Not Found
 
 ## 422.html
 
-Contains the skeleton of the 422 Error -- Unprocessable Entity
+Contient le skeleton pour la page d'erreur: 422 Error -- Unprocessable Entity
 
 ```
 
@@ -160,11 +161,10 @@ Contains the skeleton of the 422 Error -- Unprocessable Entity
 
 ## First Iteration
 
-The program allows one to get all the books in the library ('/all'), to get the number of books in the library ('/count').
-Next, it allows to add new books to the library ('/add'), to delete existing books from the library ('/delete/book_name') and to edit existing books from the library ('/edit/book_name').
+Le programme nous donne la possibilite d'acceder aux livres de la librairie ('/all'), de compter le nombres des livres dans la librairie ('/count'). On peut aussi ajouter des livres ('/add'), effacer des livres ('/delete/book_name') et d'editer des livres ('/edit/book_name')
 
-The program gives some HTTP errors if the parameters are wrong or if for instance one wants to delete or edit a book that is not in the library.
+Le programme nous returne des erreurs HTTP si les parametres sont faux ou pose de problemes. Par exemple si on veut effacer ou editer un livre qui n'est pas dans la librairie.
 
 ## Second Iteration
 
-This version of the program is a further iteration of TP1, thus all these functionalities still remain, but where slightly modified. The main new part of this iteration are the HTML templates, that actually show the library in form of HTML instead of JSON. The site has buttons to add, delete and edit the books in the library and also includes some error pages, such as the 400, 404 and 422 error page. 
+Cette version du programme est une nouvelle iteration du TP1, toutes les fonctionalitees sont reprises, mais legerement modifier. La partie principale de cette iteration sont les templates HTML, pour avoir une interface HTML pour voir, ajouter, effacer,.., les livres au lieu d'avoir que du JSON. On a des buttons pour interagir avec les pages et des pages d'erreurs en cas d'erreurs.
