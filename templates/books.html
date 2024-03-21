@@ -1,5 +1,6 @@
 {% extends "empty_page.html" %}
 {% from "my_macro.html" import show_book %}
+{% from "my_macro.html" import show_book_count %}
 
 {% block content %}
 
@@ -15,6 +16,7 @@
             {{ show_book(book.name, book.id, book.author, book.editor) }}
         {% endfor %}
     </table> 
+    {{show_book_count(count)}}
 </div>
 
 <div>

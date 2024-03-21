@@ -1,9 +1,17 @@
 body {
-    background-color: black;
-
+  background-color: rgb(116, 116, 116);
 }
 
 h1 {
-    color: red;
+    color: rgb(153, 13, 13);
 }
 
+p {
+  text-align: center;
+  color: rgb(153, 13, 13);
+}
+
+#id {
+  text-align: center;
+  color: rgb(153, 13, 13);
+}
