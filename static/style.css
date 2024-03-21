@@ -1,17 +1,11 @@
 body {
-  background-color: rgb(116, 116, 116);
+  background-color: rgb(219, 219, 219);
 }
 
 h1 {
     color: rgb(153, 13, 13);
 }
 
-p {
-  text-align: center;
-  color: rgb(153, 13, 13);
-}
-
-#id {
-  text-align: center;
-  color: rgb(153, 13, 13);
+.btn btn-outline-success mx-4{
+  align-items: center;
 }
