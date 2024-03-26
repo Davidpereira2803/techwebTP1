@@ -1,31 +1,31 @@
-from book_management.database import book_storage
+from book_management.database import database
 from book_management.book.user import User
 
 def get_user_by_name(name: str):
-    for user in book_storage['users']:
+    for user in database['users']:
         if user['name'] == name:
             return User.model_validate(user)
     return None
 
 def get_user_by_firstname(firstname: str):
-    for user in book_storage['users']:
+    for user in database['users']:
         if user['firstname'] == firstname:
             return User.model_validate(user)
     return None
 
 def get_user_by_email(email: str):
-    for user in book_storage['users']:
+    for user in database['users']:
         if user['email'] == email:
             return User.model_validate(user)
     return None
 
 def add_user(new_user: User):
-    book_storage["users"].append(new_user)
+    database["users"].append(new_user)
     return new_user
 
 def change_role(admin: User, user: User):
     if admin.role != "admin":
-        return book_storage
+        return database
     new_user = {
         'email': user.email,
         'name': user.name,
@@ -36,7 +36,7 @@ def change_role(admin: User, user: User):
     }
     delete_user(user.email)
     add_user(new_user)
-    return book_storage
+    return database
 
 def change_password(user: User, password):
     new_user = {
@@ -49,10 +49,10 @@ def change_password(user: User, password):
     }
     delete_user(user.email)
     add_user(new_user)
-    return book_storage
+    return database
 
 def count_users():
-    users = book_storage['users']
+    users = database['users']
     return len(users)
 
 def block_user(user: User):
@@ -66,7 +66,7 @@ def block_user(user: User):
     }
     delete_user(user.email)
     add_user(new_user)
-    return book_storage
+    return database
 
 def unblock_user(user: User):
     new_user = {
@@ -79,11 +79,11 @@ def unblock_user(user: User):
     }
     delete_user(user.email)
     add_user(new_user)
-    return book_storage
+    return database
 
 def delete_user(email: str):
     user_not_found = True 
-    users = book_storage["users"]
+    users = database["users"]
     for i, user in enumerate(users):
         if user['email'] == email:
             user_not_found = False
@@ -104,7 +104,7 @@ def revoke_user(user: User):
     }
     delete_user(user.email)
     add_user(new_user)
-    return book_storage
+    return database
 
 def promote_user(user: User):
     new_user = {
@@ -117,4 +117,4 @@ def promote_user(user: User):
     }
     delete_user(user.email)
     add_user(new_user)
-    return book_storage
+    return database

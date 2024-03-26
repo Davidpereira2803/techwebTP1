@@ -1,4 +1,4 @@
-book_storage = {
+database = {
     "books": [
         {
             "name": "Structure and Interpretation of Computer Programs",
@@ -21,11 +21,19 @@ book_storage = {
     ],
     "users":[
         {
+            "email": "admin",
+            "name":"admin",
+            "firstname": "admin",
+            "password":"admin",
+            "role":"admin",
+            "access": True,
+        },
+        {
             "email": "1@email.com",
             "name":"1",
             "firstname": "11",
             "password":"1234",
-            "role":"admin",
+            "role":"client",
             "access": True,
         },
         {
@@ -34,16 +42,7 @@ book_storage = {
             "firstname": "22",
             "password":"1234",
             "role":"client",
-            "access": True,
-        },
-        {
-            "email": "3@email.com",
-            "name":"3",
-            "firstname": "33",
-            "password":"1234",
-            "role":"client",
             "access": False,
         },
-
     ]
 }

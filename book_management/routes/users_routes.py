@@ -8,7 +8,7 @@ from pydantic import ValidationError
 from book_management.login import manager
 import book_management.services.users_services as services
 from book_management.book.user import User   
-from book_management.database import book_storage 
+from book_management.database import database 
 
 login_router = APIRouter(prefix="/users")
 templates = Jinja2Templates(directory="templates")
@@ -112,13 +112,13 @@ def ask_to_change_password(request: Request, user: User = Depends(manager.option
 @login_router.post('/change')
 def change_password(password: Annotated[str, Form()], user: User = Depends(manager.optional)):
     services.change_password(user, password)
-    print(book_storage['users'])
+    print(database['users'])
     return RedirectResponse(url="/books/all", status_code=302)
 
 
 @login_router.get('/dashboard')
 def ask_to_dashboard(request: Request, user: User = Depends(manager.optional)):
-        users = book_storage['users']
+        users = database['users']
         count = services.count_users()
         return templates.TemplateResponse(
         "account/dashboard.html",

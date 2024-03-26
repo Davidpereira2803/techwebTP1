@@ -1,11 +1,11 @@
 from http.client import HTTPException
 from pydantic import ValidationError
 
-from book_management.database import book_storage
+from book_management.database import database
 from book_management.book.book import Book, CheckBook
 
 def get_all_books() -> list[Book]:
-    books_dict = book_storage["books"]
+    books_dict = database["books"]
     try:
         books  = [Book.model_validate(data) for data in books_dict]
         for book in books_dict:
@@ -15,7 +15,7 @@ def get_all_books() -> list[Book]:
     return books
 
 def get_number_of_books():
-    books_dict = book_storage["books"]
+    books_dict = database["books"]
     try:
         books  = [Book.model_validate(data) for data in books_dict]
         for book in books_dict:
@@ -30,12 +30,12 @@ def get_number_of_books():
     return f'There are {length} books on the shelf!'
 
 def add_book(new_book: Book):
-    book_storage["books"].append(new_book)
+    database["books"].append(new_book)
     return new_book
 
 def delete_book_by_name(name: str):
     book_not_found = True 
-    books = book_storage["books"]
+    books = database["books"]
     for i, book in enumerate(books):
         if book['name'] == name:
             book_not_found = False
@@ -48,10 +48,10 @@ def delete_book_by_name(name: str):
 def edit_book(book_to_edit: str, book: Book):
     delete_book_by_name(book_to_edit)
     add_book(book.model_dump())
-    return book_storage
+    return database
 
 def get_book_by_name(book_name: str):
-    books = book_storage["books"]
+    books = database["books"]
     for book in books:
         if book['name'] == book_name:
             return book
