@@ -1,0 +1,78 @@
+{% extends "empty_page.html" %}
+{% from "my_macro.html" import show_user %}
+
+{% block content %}
+
+<div class="container">
+    {% if active_user is not none %}
+    <h2>Active User: {{ active_user.name }} {{active_user.firstname}} {{active_user.role}}</h2>
+    {% endif %}
+
+    <table class="table">
+        <tr>
+            <th>Email</th>
+            <th>Name</th>
+            <th>Firstname</th>
+            <th>Role</th>
+            <th>Access</th>
+        </tr>
+        {% for user in users %}
+            {{ show_user(user.email, user.name, user.firstname, user.role, user.access) }}
+        {% endfor %}
+    </table> 
+    <p>Total number of users: {{count}}</p>
+</div>
+
+<div>
+<form action="/users/block" method="post">
+
+    <div class="form-group">
+        <label for="user_email">Email</label>
+        <input type="text" class="form-control" id="email" name="email" placeholder="Email" />
+    </div>
+
+    <button type="submit" class="btn btn-success my-4">Block User</button>
+
+</form>
+
+<form action="/users/unblock" method="post">
+
+    <div class="form-group">
+        <label for="user_email">Email</label>
+        <input type="text" class="form-control" id="email" name="email" placeholder="Email" />
+    </div>
+
+    <button type="submit" class="btn btn-success my-4">Unblock User</button>
+
+</form>
+</div>
+
+<div>
+    <form action="/users/promote" method="post">
+    
+        <div class="form-group">
+            <label for="user_email">Email</label>
+            <input type="text" class="form-control" id="email" name="email" placeholder="Email" />
+        </div>
+    
+        <button type="submit" class="btn btn-success my-4">Promote User</button>
+    
+    </form>
+    
+    <form action="/users/revoke" method="post">
+    
+        <div class="form-group">
+            <label for="user_email">Email</label>
+            <input type="text" class="form-control" id="email" name="email" placeholder="Email" />
+        </div>
+    
+        <button type="submit" class="btn btn-success my-4">Revoke User</button>
+    
+    </form>
+    </div>
+
+<div>
+    <a class="btn btn-outline-success mx-4" href="/books/all">Back</a>
+</div>
+
+{% endblock %}

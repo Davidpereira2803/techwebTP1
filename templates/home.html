@@ -1,0 +1,16 @@
+{% extends "empty_page.html" %}
+{% from "my_macro.html" import show_book %}
+{% from "my_macro.html" import show_book_count %}
+
+{% block content %}
+<div class="container">
+    <h2>My Library Server</h2>
+    <h3>Welcome to my Library!</h3>
+</div>
+
+<div class="btn">
+    <a class="btn btn-outline-success mx-4" href="/users/login">Log In</a>
+    <a class="btn btn-outline-success mx-4" href="/users/create">Create Account</a>
+</div>
+
+{% endblock %}

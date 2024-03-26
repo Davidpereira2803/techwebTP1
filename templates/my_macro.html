@@ -18,3 +18,25 @@
 {% macro show_book_count(count)%}
     <p> {{ count }}</p>
 {% endmacro %}
+
+{% macro show_user(email, name, firstname, role, access) %}
+<tr>
+    <td>{{ email }}</td>
+    
+    <td>
+        {{ name }}
+    </td>
+
+    <td>
+        {{ firstname }}
+    </td>
+
+    <td>
+        {{ role }}
+    </td>
+
+    <td>
+        {{ access }}
+    </td>
+</tr>
+{% endmacro %}

@@ -7,24 +7,27 @@ from typing import Annotated
 
 import book_management.services.services as services
 from book_management.book.book import Book, CheckBook
+from book_management.book.user import User
+from book_management.login import manager
 
 
 router = APIRouter(prefix="/books" , tags=["Books"])
 templates = Jinja2Templates(directory="templates")
 
 @router.get('/all')
-def get_all_books(request: Request):
+def get_all_books(request: Request, user: User = Depends(manager.optional)):
     books = services.get_all_books()
     count = services.get_number_of_books()
     return templates.TemplateResponse(
-        "books.html",
-        context={'request': request, 'books': books, 'count': count}
+        request,
+        "book/books.html",
+        context={'books': books, 'count': count, 'active_user': user}
     )
 
 @router.get('/add')
 def ask_to_add_new_book(request: Request):
     return templates.TemplateResponse(
-        "new_book.html",
+        "book/new_book.html",
         context={'request': request}
     )
 
@@ -54,7 +57,7 @@ def add_new_book(name: Annotated[str, Form()], id: Annotated[str, Form()], autho
 @router.get('/delete')
 def ask_to_delete_book(request: Request):
     return templates.TemplateResponse(
-        "delete_book.html",
+        "book/delete_book.html",
         context={'request': request}
     )
 
@@ -71,7 +74,7 @@ def delete_book_by_name(book_name: Annotated[str, Form()]):
 @router.get('/edit')
 def ask_to_edit_book(request: Request):
     return templates.TemplateResponse(
-        "edit_book.html",
+        "book/edit_book.html",
         context={'request': request}
     )
 

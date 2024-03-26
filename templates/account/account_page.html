@@ -1,0 +1,41 @@
+{% extends "empty_page.html" %}
+
+{% block content %}
+
+<div class="container">
+    {% if active_user is not none %}
+    <h2>Active User: {{ active_user.name }} {{active_user.firstname}}</h2>
+    {% endif %}
+
+    <table class="table">
+        <tr>
+            <th>{{ active_user.email }}</th>
+            <th>{{ active_user.name }}</th>
+            <th>{{ active_user.firstname }}</th>
+        </tr>
+    </table>
+
+    <form action="/users/change" method="post">
+
+        <div class="form-group">
+            <label for="email">Current Email</label>
+            <input type="text" class="form-control" id="email" name="email" placeholder="email" />
+        </div>
+
+        <div class="form-group">
+            <label for="new_password">New Password</label>
+            <input type="password" class="form-control" id="password" name="password" placeholder="password" />
+        </div>
+
+        <button type="submit" class="btn btn-success my-4">Change Password</button>
+
+    </form>
+
+</div>
+
+<div>
+    <a class="btn btn-outline-success mx-4" href="/books/all">Back</a>
+    <a class="btn btn-outline-success mx-4" href="/users/logout">Log Out</a>
+</div>
+
+{% endblock %}

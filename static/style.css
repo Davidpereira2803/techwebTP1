@@ -1,17 +1,21 @@
 body {
-  background-color: rgb(116, 116, 116);
+  background-color: rgb(213, 213, 213);
 }
 
-h1 {
-    color: rgb(153, 13, 13);
+h2 {
+  padding: 10px;
+  text-decoration: underline;
 }
 
-p {
-  text-align: center;
-  color: rgb(153, 13, 13);
+h3 {
+  padding: 10px;
 }
 
-#id {
-  text-align: center;
-  color: rgb(153, 13, 13);
+.btn {
+  padding: 10px;
+  margin: 10px;
+}
+
+.form-group, button {
+  margin: 30px;
 }

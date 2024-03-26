@@ -1,0 +1,18 @@
+{% extends "empty_page.html" %}
+
+{% block content %}
+
+<div class="logout">
+    <h1>Logout</h1>
+    <form action="/users/logout" method="post">
+
+        <button type="submit" class="btn btn-success my-4">Logout</button>
+
+    </form>
+</div>
+<div>
+    <a class="btn btn-outline-dark mx-2" href="/users/home">Back</a>
+</div>
+
+
+{% endblock %}
