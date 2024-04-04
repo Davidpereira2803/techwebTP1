@@ -76,7 +76,12 @@ def ask_to_create_account(request: Request):
     )
 
 @login_router.post('/create')
-def create_account(email: Annotated[str, Form()],name: Annotated[str, Form()], firstname: Annotated[str, Form()], password: Annotated[str, Form()]):
+def create_account(email: Annotated[str, Form()],name: Annotated[str, Form()], firstname: Annotated[str, Form()], password: Annotated[str, Form()], password_check: Annotated[str, Form()]):
+    if password != password_check:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail= "Passwords don't match!"
+        )
     new_user = {
         'email': email,
         'name': name,

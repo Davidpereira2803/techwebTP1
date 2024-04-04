@@ -2,13 +2,13 @@ from pydantic import BaseModel, Field, ValidationError
 
 class Book(BaseModel):
     name: str = Field(min_length = 1)
-    id: str
+    id: str = Field(min_length = 1)
     author: str = Field(min_length = 1)
-    editor: str = Field(min_length = 1)
+    editor: str 
 
 class CheckBook():
     def check_book(book):
-        if(book['name'].isspace() or book['author'].isspace() or book['editor'].isspace()):
+        if(book['name'].isspace() or book['author'].isspace() or book['id'].isspace()):
             return None
         return True
     

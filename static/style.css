@@ -19,3 +19,7 @@ h3 {
 .form-group, button {
   margin: 30px;
 }
+
+header {
+  background-color: rgb(49, 49, 49);
+}
