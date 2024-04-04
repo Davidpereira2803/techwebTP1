@@ -1,4 +1,4 @@
-# TP2
+# TP
 The project is structured like the following:
 
 ```
