@@ -51,14 +51,6 @@ def login_route(email: Annotated[str, Form()],password: Annotated[str, Form()]):
     )
     return response
 
-
-@login_router.get('/logout')
-def ask_to_logout(request: Request):
-    return templates.TemplateResponse(
-        "authentication/logout.html",
-        context={'request': request}
-    )
-
 @login_router.post('/logout')
 def logout_route():
     response = RedirectResponse(url="/users/home", status_code=302)
@@ -101,7 +93,7 @@ def create_account(email: Annotated[str, Form()],name: Annotated[str, Form()], f
     return RedirectResponse(url="/books/all", status_code=302)
 
 @login_router.get('/home')
-def ask_to_create_account(request: Request):
+def ask_to_go_home(request: Request):
         return templates.TemplateResponse(
         "home.html",
         context={'request': request}
