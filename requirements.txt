@@ -1,5 +1,12 @@
+<<<<<<< Updated upstream
 pydantic 
 uvicorn
 fastapi
 jinja2
+=======
+pydantic 
+jinja2
+uvicorn
+fastapi
+>>>>>>> Stashed changes
 python-multipart

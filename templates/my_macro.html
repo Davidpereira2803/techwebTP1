@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 {% macro show_book(name, id, author, editor) %}
     <tr>
         <td>{{ name }}</td>
@@ -13,4 +14,25 @@
             {{ editor }}
         </td>
     </tr>
+=======
+{% macro show_book(name, id, author, editor) %}
+    <tr>
+        <td>{{ name }}</td>
+        
+        <td>
+            {{ id }}
+        </td>
+
+        <td>
+            {{ author }}
+        </td>
+        <td>
+            {{ editor }}
+        </td>
+    </tr>
+{% endmacro %}
+
+{% macro show_book_count(count)%}
+    <p> {{ count }}</p>
+>>>>>>> Stashed changes
 {% endmacro %}
