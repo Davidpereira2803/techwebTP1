@@ -1,6 +1,6 @@
 from pydantic import BaseModel, Field, ValidationError
 
-class Book(BaseModel):
+class BookSchema(BaseModel):
     name: str = Field(min_length = 1)
     id: str = Field(min_length = 1)
     author: str = Field(min_length = 1)

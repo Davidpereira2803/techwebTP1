@@ -4,6 +4,7 @@ from fastapi.templating import Jinja2Templates
 
 from book_management.routes.routes import router
 from book_management.routes.users_routes import login_router
+from book_management.database import create_database
 
 templates = Jinja2Templates(directory="templates")
 
@@ -15,6 +16,7 @@ app.include_router(login_router)
 @app.on_event('startup')
 def on_startup():
     print("Library Server has started!")
+    create_database()
 
 @app.on_event('shutdown')
 def on_shutdown():

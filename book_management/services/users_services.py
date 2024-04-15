@@ -1,5 +1,9 @@
-from book_management.database import database
-from book_management.book.user import User
+from sqlalchemy import select
+
+from book_management.database import Session
+from book_management.schema.user import UserSchema
+from book_management.database import Session
+from book_management.sql_models.users import User
 
 def get_user_by_name(name: str):
     for user in database['users']:
@@ -10,13 +14,16 @@ def get_user_by_name(name: str):
 def get_user_by_firstname(firstname: str):
     for user in database['users']:
         if user['firstname'] == firstname:
-            return User.model_validate(user)
+            return UserSchema.model_validate(user)
     return None
 
 def get_user_by_email(email: str):
-    for user in database['users']:
-        if user['email'] == email:
-            return User.model_validate(user)
+    with Session() as session:
+        statement = select(User)
+        users_data = session.scalars(statement).all()
+    for user in users_data:
+        if user.email == email:
+            return user
     return None
 
 def add_user(new_user: User):

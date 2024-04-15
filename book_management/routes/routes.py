@@ -6,8 +6,8 @@ from pydantic import ValidationError
 from typing import Annotated
 
 import book_management.services.services as services
-from book_management.book.book import Book, CheckBook
-from book_management.book.user import User
+from book_management.schema.book import BookSchema, CheckBook
+from book_management.schema.user import UserSchema
 from book_management.login import manager
 
 
@@ -15,7 +15,7 @@ router = APIRouter(prefix="/books" , tags=["Books"])
 templates = Jinja2Templates(directory="templates")
 
 @router.get('/all')
-def get_all_books(request: Request, user: User = Depends(manager.optional)):
+def get_all_books(request: Request, user: UserSchema = Depends(manager.optional)):
     books = services.get_all_books()
     count = services.get_number_of_books()
     return templates.TemplateResponse(
@@ -40,7 +40,7 @@ def add_new_book(name: Annotated[str, Form()], id: Annotated[str, Form()], autho
         'editor': editor,
     }
     try:
-        book = Book.model_validate(new_book)
+        book = BookSchema.model_validate(new_book)
         if CheckBook.check_book(new_book) is None:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
@@ -51,7 +51,7 @@ def add_new_book(name: Annotated[str, Form()], id: Annotated[str, Form()], autho
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Invalid book!",
         )
-    services.add_book(book.model_dump())
+    services.add_book(book)
     return RedirectResponse(url="/books/all", status_code=302)
 
 @router.get('/delete')
@@ -64,7 +64,7 @@ def ask_to_delete_book(request: Request):
 @router.post('/delete')
 def delete_book_by_name(book_name: Annotated[str, Form()]):
     updated_book_storage = services.delete_book_by_name(book_name)
-    if updated_book_storage is None:
+    if updated_book_storage is not None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="No book found with this NAME!",

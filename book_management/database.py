@@ -1,3 +1,26 @@
+from sqlalchemy import create_engine
+from sqlalchemy.orm import DeclarativeBase, sessionmaker
+
+engine = create_engine(
+    "sqlite:///data/db.sqlite",
+    echo=True,
+)
+
+Session = sessionmaker(engine)
+
+class Base(DeclarativeBase):
+    pass
+
+from book_management.sql_models.books import Book
+from book_management.sql_models.users import User
+
+def create_database():
+    Base.metadata.create_all(engine)
+
+def delete_database():
+    Base.metadata.clear()
+
+"""
 database = {
     "books": [
         {
@@ -46,3 +69,4 @@ database = {
         },
     ]
 }
+"""

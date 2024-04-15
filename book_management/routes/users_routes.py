@@ -7,14 +7,14 @@ from pydantic import ValidationError
 
 from book_management.login import manager
 import book_management.services.users_services as services
-from book_management.book.user import User   
-from book_management.database import database 
+from book_management.schema.user import UserSchema 
+from book_management.database import Session 
 
 login_router = APIRouter(prefix="/users")
 templates = Jinja2Templates(directory="templates")
 
 @login_router.get("/me")
-def current_user_route(user: User = Depends(manager)):
+def current_user_route(user: UserSchema = Depends(manager)):
     return user
 
 @login_router.get('/login')
@@ -83,7 +83,7 @@ def create_account(email: Annotated[str, Form()],name: Annotated[str, Form()], f
         'access': True
     }
     try:
-        user = User.model_validate(new_user)
+        user = UserSchema.model_validate(new_user)
     except ValidationError as er: 
         return HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -100,21 +100,21 @@ def ask_to_go_home(request: Request):
     )
 
 @login_router.get('/change')
-def ask_to_change_password(request: Request, user: User = Depends(manager.optional)):
+def ask_to_change_password(request: Request, user: UserSchema = Depends(manager.optional)):
         return templates.TemplateResponse(
         "account/account_page.html",
         context={'request': request, 'active_user': user}
     )
 
 @login_router.post('/change')
-def change_password(password: Annotated[str, Form()], user: User = Depends(manager.optional)):
+def change_password(password: Annotated[str, Form()], user: UserSchema = Depends(manager.optional)):
     services.change_password(user, password)
     print(database['users'])
     return RedirectResponse(url="/books/all", status_code=302)
 
 
 @login_router.get('/dashboard')
-def ask_to_dashboard(request: Request, user: User = Depends(manager.optional)):
+def ask_to_dashboard(request: Request, user: UserSchema = Depends(manager.optional)):
         users = database['users']
         count = services.count_users()
         return templates.TemplateResponse(
