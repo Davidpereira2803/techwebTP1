@@ -9,6 +9,7 @@
     <a class="btn btn-outline-success mx-4" href="/users/dashboard">Dashboard</a>
     {% endif %}
     <a class="btn btn-outline-success mx-4" href="/users/change">Account</a>
+    <a class="btn btn-outline-success mx-4" href="/users/mybooks">My Books</a>
     <form action="/users/logout" method="post">
         <button type="submit" class="btn btn-outline-success mx-4">Logout</button>
     </form>
@@ -25,9 +26,11 @@
             <th>Id</th>
             <th>Author</th>
             <th>Editor</th>
+            <th>Price</th>
+            <th>Owner Email</th>
         </tr>
         {% for book in books %}
-            {{ show_book(book.name, book.id, book.author, book.editor) }}
+            {{ show_book(book.name, book.id, book.author, book.editor, book.price, book.owner_email) }}
         {% endfor %}
     </table> 
     {{show_book_count(count)}}

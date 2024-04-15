@@ -1,0 +1,32 @@
+{% extends "empty_page.html" %}
+{% from "my_macro.html" import show_my_book %}
+
+{% block content %}
+
+<div class="container">
+    {% if active_user is not none %}
+    <h2>Active User: Name: {{ active_user.name }}, Firstname: {{active_user.firstname}}, Role: {{active_user.role}}</h2>
+    {% endif %}
+
+    <table class="table">
+        <tr>
+            <th>Name</th>
+            <th>Id</th>
+            <th>Author</th>
+            <th>Editor</th>
+            <th>Price</th>
+            <th>Owner Name</th>
+            <th>Owner Firstname</th>
+        </tr>
+        {% for book in books %}
+            {{ show_my_book(book.name, book.id, book.author, book.editor, book.price, active_user, owner_names, owner_firstnames) }}
+        {% endfor %}
+    </table> 
+</div>
+
+<div>
+    <a class="btn btn-outline-success mx-4" href="/books/all">Back</a>
+    <a class="btn btn-outline-success mx-4" href="/users/logout">Log Out</a>
+</div>
+
+{% endblock %}

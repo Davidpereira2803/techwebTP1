@@ -1,5 +1,5 @@
 {% extends "empty_page.html" %}
-{% from "my_macro.html" import show_book %}
+{% from "my_macro.html" import show_book_home %}
 {% from "my_macro.html" import show_book_count %}
 
 {% block content %}
@@ -11,6 +11,26 @@
 <div class="btn">
     <a class="btn btn-outline-success mx-4" href="/users/login">Log In</a>
     <a class="btn btn-outline-success mx-4" href="/users/create">Create Account</a>
+</div>
+
+
+<div class="container">
+    <table class="table">
+        <tr>
+            <th>Name</th>
+            <th>Id</th>
+            <th>Author</th>
+            <th>Editor</th>
+            <th>Price</th>
+            <th>Owner Name</th>
+            <th>Owner Firstname</th>
+        </tr>
+        {% for book in books %}
+            {{ show_book_home(book.name, book.id, book.author, book.editor, book.price, owner_names, owner_firstnames) }}
+        {% endfor %}
+
+    </table> 
+    {{show_book_count(count)}}
 </div>
 
 {% endblock %}

@@ -1,4 +1,4 @@
-{% macro show_book(name, id, author, editor) %}
+{% macro show_book(name, id, author, editor, price, owner_email, owner_names) %}
     <tr>
         <td>{{ name }}</td>
         
@@ -12,6 +12,13 @@
         <td>
             {{ editor }}
         </td>
+        <td>
+            {{ price }}
+        </td>
+        <td>
+            {{owner_email}}
+        </td>
+
     </tr>
 {% endmacro %}
 
@@ -39,4 +46,70 @@
         {{ access }}
     </td>
 </tr>
+{% endmacro %}
+
+{% macro show_book_home(name, id, author, editor, price, owner_names, owner_firstnames) %}
+    <tr>
+        <td>{{ name }}</td>
+        
+        <td>
+            {{ id }}
+        </td>
+
+        <td>
+            {{ author }}
+        </td>
+        <td>
+            {{ editor }}
+        </td>
+        <td>
+            {{ price }}
+        </td>
+        <td>
+            {% for name in owner_names %}
+                {{name}}
+            {% endfor %}
+        </td>
+        <td>
+            {% for firstname in owner_firstnames %}
+                {{firstname}}  
+            {% endfor %}
+        </td>
+
+    </tr>
+{% endmacro %}
+
+{% macro show_my_book(name, id, author, editor, price, active_user, owner_names, owner_firstnames) %}
+    <tr>
+        <td>{{ name }}</td>
+        
+        <td>
+            {{ id }}
+        </td>
+
+        <td>
+            {{ author }}
+        </td>
+        <td>
+            {{ editor }}
+        </td>
+        <td>
+            {{ price }}
+        </td>
+        <td>
+            {% for name in owner_names %}
+                {% if active_user.name == name %}
+                    {{name}}
+                {% endif %}    
+            {% endfor %}
+        </td>
+        <td>
+            {% for firstname in owner_firstnames %}
+                {% if active_user.firstname == firstname %}
+                    {{firstname}}
+                {% endif %}    
+            {% endfor %}
+        </td>
+
+    </tr>
 {% endmacro %}

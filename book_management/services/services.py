@@ -6,12 +6,19 @@ from sqlalchemy.orm import joinedload
 from book_management.database import Session
 from book_management.schema.book import BookSchema, CheckBook
 from book_management.sql_models.books import Book
+from book_management.sql_models.users import User
 
 def access_db():
     with Session() as session:
         statement = select(Book)
         books_data = session.scalars(statement).all()
     return books_data
+
+def get_users_db():
+    with Session() as session:
+        statement = select(User)
+        users_data = session.scalars(statement).all()
+    return users_data
 
 
 def get_all_books() -> list[Book]:
@@ -20,7 +27,9 @@ def get_all_books() -> list[Book]:
         name= book.name,
         id=book.id,
         author=book.author,
-        editor=book.editor
+        editor=book.editor,
+        price=book.price,
+        owner_email=book.owner_email,
     )
     for book in books_data
     ]
@@ -39,9 +48,12 @@ def add_book(new_book: BookSchema):
         book = Book(name= new_book.name,
                     id= new_book.id,
                     author= new_book.author,
-                    editor=new_book.editor)
+                    editor=new_book.editor,
+                    price=new_book.price,
+                    owner_email=new_book.owner_email)
         session.add(book)
         session.commit()
+    get_owner_names()
     return book
 
 def delete_book_by_name(delete_name: str):
@@ -52,14 +64,39 @@ def delete_book_by_name(delete_name: str):
         session.delete(user)
         session.commit()
     
-def edit_book(book_to_edit: str, book: Book):
-    delete_book_by_name(book_to_edit)
-    add_book(book.model_dump())
-    return database
+def edit_book(book_to_edit: str, book: BookSchema):
+    with Session() as session:
+        statement = select(Book).filter_by(name= book_to_edit)
+        new_book = session.scalars(statement).one()
 
-def get_book_by_name(book_name: str):
-    books = database["books"]
+        new_book.name = book.name
+        new_book.id = book.id
+        new_book.author = book.author
+        new_book.editor = book.editor
+        new_book.price = book.price
+        new_book.owner_email = book.owner_email
+
+        session.commit()
+
+
+def get_owner_names():
+    name = []
+    books = access_db()
+    users = get_users_db()
+
     for book in books:
-        if book['name'] == book_name:
-            return book
-    return None
+        for user in users:
+            if book.owner_email == user.email:
+                name.append(user.name)
+    return name
+
+def get_owner_firstnames():
+    firstname = []
+    books = access_db()
+    users = get_users_db()
+
+    for book in books:
+        for user in users:
+            if book.owner_email == user.email:
+                firstname.append(user.firstname)
+    return firstname

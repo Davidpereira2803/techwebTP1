@@ -5,6 +5,9 @@ class BookSchema(BaseModel):
     id: str = Field(min_length = 1)
     author: str = Field(min_length = 1)
     editor: str 
+    price: str = Field(min_length = 1)
+    owner_email: str = Field(min_length=1)
+    status: str = Field(min_length=1)
 
 class CheckBook():
     def check_book(book):

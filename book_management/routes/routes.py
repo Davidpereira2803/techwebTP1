@@ -32,12 +32,15 @@ def ask_to_add_new_book(request: Request):
     )
 
 @router.post('/add')
-def add_new_book(name: Annotated[str, Form()], id: Annotated[str, Form()], author: Annotated[str, Form()], editor: Annotated[str, Form()]):
+def add_new_book(name: Annotated[str, Form()], id: Annotated[str, Form()], author: Annotated[str, Form()], editor: Annotated[str, Form()], price: Annotated[str, Form()], owner_email: Annotated[str, Form()]):
     new_book = {
         'name': name,
         'id': id,
         'author': author,
         'editor': editor,
+        'price': price,
+        'owner_email': owner_email,
+        'status': 'available'
     }
     try:
         book = BookSchema.model_validate(new_book)
@@ -79,20 +82,23 @@ def ask_to_edit_book(request: Request):
     )
 
 @router.post('/edit')
-def edit(book_name: Annotated[str, Form()], name: Annotated[str, Form()], id: Annotated[str, Form()], author: Annotated[str, Form()], editor: Annotated[str, Form()]):
+def edit(book_name: Annotated[str, Form()], name: Annotated[str, Form()], id: Annotated[str, Form()], author: Annotated[str, Form()], editor: Annotated[str, Form()], price: Annotated[str, Form()], owner_email: Annotated[str, Form()], status: Annotated[str, Form()]):
     new_book = {
         'name': name,
         'id': id,
         'author': author,
-        'editor': editor
+        'editor': editor,
+        'price':price,
+        'owner_email':owner_email,
+        'status':status
     }
-    if services.get_book_by_name(book_name) == None:    
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="No book found with this NAME!",
-        )
+    # if services.get_book_by_name(book_name) == None:    
+    #    raise HTTPException(
+    #        status_code=status.HTTP_404_NOT_FOUND,
+    #        detail="No book found with this NAME!",
+    #    )
     try:
-        book = Book.model_validate(new_book)
+        book = BookSchema.model_validate(new_book)
         if CheckBook.check_book(new_book) is None:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
@@ -105,6 +111,3 @@ def edit(book_name: Annotated[str, Form()], name: Annotated[str, Form()], id: An
         )
     services.edit_book(book_name, book)
     return RedirectResponse(url="/books/all", status_code=302)
-
-
-    
