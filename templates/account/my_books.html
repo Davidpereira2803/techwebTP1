@@ -15,11 +15,16 @@
             <th>Author</th>
             <th>Editor</th>
             <th>Price</th>
+            <th>Book Availability</th>
             <th>Owner Name</th>
             <th>Owner Firstname</th>
+            <th>Change Availability</th>
+            <th>Change Price</th>
         </tr>
         {% for book in books %}
-            {{ show_my_book(book.name, book.id, book.author, book.editor, book.price, active_user, owner_names, owner_firstnames) }}
+            {% if active_user.email == book.owner_email %}
+                {{ show_my_book(book.name, book.id, book.author, book.editor, book.price, book.status, active_user)}}
+            {% endif %}  
         {% endfor %}
     </table> 
 </div>

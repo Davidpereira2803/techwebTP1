@@ -28,10 +28,20 @@
             <th>Editor</th>
             <th>Price</th>
             <th>Owner Email</th>
+            <th>Availability Status</th>
         </tr>
-        {% for book in books %}
-            {{ show_book(book.name, book.id, book.author, book.editor, book.price, book.owner_email) }}
-        {% endfor %}
+        {% if active_user.role != "admin"%}
+            {% for book in books %}
+                {% if book.status == "available"%}
+                    {{ show_book(book.name, book.id, book.author, book.editor, book.price, book.owner_email, book.status) }}
+                {% endif %}  
+            {% endfor %}
+        {% endif %}  
+        {% if active_user.role == "admin"%}
+            {% for book in books %}
+                    {{ show_book(book.name, book.id, book.author, book.editor, book.price, book.owner_email, book.status) }}
+            {% endfor %}
+        {% endif %}  
     </table> 
     {{show_book_count(count)}}
 </div>
@@ -43,7 +53,4 @@
     <a class="btn btn-outline-success mx-4" href="/books/edit">Edit a book</a>
     {% endif %}
 </div>
-
-
-
 {% endblock %}

@@ -30,6 +30,7 @@ def get_all_books() -> list[Book]:
         editor=book.editor,
         price=book.price,
         owner_email=book.owner_email,
+        status=book.status
     )
     for book in books_data
     ]
@@ -50,7 +51,8 @@ def add_book(new_book: BookSchema):
                     author= new_book.author,
                     editor=new_book.editor,
                     price=new_book.price,
-                    owner_email=new_book.owner_email)
+                    owner_email=new_book.owner_email,
+                    status= new_book.status)
         session.add(book)
         session.commit()
     get_owner_names()
@@ -75,6 +77,7 @@ def edit_book(book_to_edit: str, book: BookSchema):
         new_book.editor = book.editor
         new_book.price = book.price
         new_book.owner_email = book.owner_email
+        new_book.status = book.status
 
         session.commit()
 
@@ -100,3 +103,24 @@ def get_owner_firstnames():
             if book.owner_email == user.email:
                 firstname.append(user.firstname)
     return firstname
+
+def sell_unsell_book(book_name:str):
+    with Session() as session:
+        statement = select(Book).filter_by(name= book_name)
+        new_book = session.scalars(statement).one()
+
+        if new_book.status == "sold":
+            new_book.status = "available"
+        else:
+            new_book.status = "sold"
+
+        session.commit()
+
+def change_price(book_name:str, price:str):
+    with Session() as session:
+        statement = select(Book).filter_by(name= book_name)
+        new_book = session.scalars(statement).one()
+        
+        new_book.price = price
+
+        session.commit()

@@ -26,9 +26,10 @@
             <th>Owner Firstname</th>
         </tr>
         {% for book in books %}
-            {{ show_book_home(book.name, book.id, book.author, book.editor, book.price, owner_names, owner_firstnames) }}
+            {% if book.status == "available" %}
+                {{ show_book_home(book.name, book.id, book.author, book.editor, book.price, owner_names, owner_firstnames) }}
+            {% endif %} 
         {% endfor %}
-
     </table> 
     {{show_book_count(count)}}
 </div>

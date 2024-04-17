@@ -90,7 +90,7 @@ def create_account(email: Annotated[str, Form()],name: Annotated[str, Form()], f
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail= "Bad credentials!"
         )
-    services.add_user(user.model_dump())
+    services.add_user(user)
     return RedirectResponse(url="/books/all", status_code=302)
 
 @login_router.get('/home')
@@ -111,16 +111,25 @@ def ask_to_change_password(request: Request, user: UserSchema = Depends(manager.
         context={'request': request, 'active_user': user}
     )
 
-@login_router.post('/change')
-def change_password(password: Annotated[str, Form()], user: UserSchema = Depends(manager.optional)):
-    services.change_password(user, password)
-    print(database['users'])
+@login_router.post('/change/password')
+def change_password(old_password: Annotated[str, Form()], password: Annotated[str, Form()], check_password: Annotated[str, Form()],user: UserSchema = Depends(manager.optional)):
+    if check_password != password or user.password != old_password: 
+         raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail= "Passwords don't match!"
+        )
+    services.change_password(user, password, check_password)
+    return RedirectResponse(url="/books/all", status_code=302)
+
+@login_router.post('/change/information')
+def change_information(email: Annotated[str, Form()], name: Annotated[str, Form()],firstname: Annotated[str, Form()],user: UserSchema = Depends(manager.optional)):
+    services.change_information(user, email, firstname, name)
     return RedirectResponse(url="/books/all", status_code=302)
 
 
 @login_router.get('/dashboard')
 def ask_to_dashboard(request: Request, user: UserSchema = Depends(manager.optional)):
-        users = database['users']
+        users = services.access_db()
         count = services.count_users()
         return templates.TemplateResponse(
         "account/dashboard.html",

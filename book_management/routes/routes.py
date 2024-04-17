@@ -111,3 +111,13 @@ def edit(book_name: Annotated[str, Form()], name: Annotated[str, Form()], id: An
         )
     services.edit_book(book_name, book)
     return RedirectResponse(url="/books/all", status_code=302)
+
+@router.post('/sell')
+def sell(book_name: Annotated[str, Form()]):
+    services.sell_unsell_book(book_name)
+    return RedirectResponse(url="/users/mybooks", status_code=302)
+
+@router.post('/change/price')
+def sell(book_name: Annotated[str, Form()], price: Annotated[str, Form()]):
+    services.change_price(book_name, price)
+    return RedirectResponse(url="/users/mybooks", status_code=302)

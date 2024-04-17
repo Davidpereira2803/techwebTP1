@@ -1,11 +1,11 @@
-{% macro show_book(name, id, author, editor, price, owner_email, owner_names) %}
+{% macro show_book(name, id, author, editor, price, owner_email, status) %}
     <tr>
-        <td>{{ name }}</td>
-        
+        <td>
+            {{ name }}
+        </td>
         <td>
             {{ id }}
         </td>
-
         <td>
             {{ author }}
         </td>
@@ -18,7 +18,9 @@
         <td>
             {{owner_email}}
         </td>
-
+        <td>
+            {{ status }}
+        </td>
     </tr>
 {% endmacro %}
 
@@ -79,14 +81,14 @@
     </tr>
 {% endmacro %}
 
-{% macro show_my_book(name, id, author, editor, price, active_user, owner_names, owner_firstnames) %}
+{% macro show_my_book(name, id, author, editor, price, status, active_user) %}
     <tr>
-        <td>{{ name }}</td>
-        
+        <td>
+            {{ name }}
+        </td>
         <td>
             {{ id }}
         </td>
-
         <td>
             {{ author }}
         </td>
@@ -97,19 +99,27 @@
             {{ price }}
         </td>
         <td>
-            {% for name in owner_names %}
-                {% if active_user.name == name %}
-                    {{name}}
-                {% endif %}    
-            {% endfor %}
+            {{ status }}
         </td>
         <td>
-            {% for firstname in owner_firstnames %}
-                {% if active_user.firstname == firstname %}
-                    {{firstname}}
-                {% endif %}    
-            {% endfor %}
+            {{ active_user.name }}
         </td>
-
+        <td>
+            {{active_user.firstname}}
+        </td>
+        <td>                
+            <form action="/books/sell" method="post">
+                <input type="hidden" class="form-control" id="book_status" name="book_name" value="{{name}}"/>
+                <button type="submit" class="btn btn-success my-4">Change</button>
+            </form>
+        </td>
+        <td>                
+            <form action="/books/change/price" method="post">
+                <input type="hidden" class="form-control" id="book_status" name="book_name" value="{{name}}"/>
+                <input type="text" class="form-control" id="book_price" name="price" placeholder="10"/>
+                <button type="submit" class="btn btn-success my-4">Change</button>
+            </form>
+        </td>
     </tr>
+
 {% endmacro %}
