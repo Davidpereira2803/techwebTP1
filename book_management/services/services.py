@@ -55,7 +55,6 @@ def add_book(new_book: BookSchema):
                     status= new_book.status)
         session.add(book)
         session.commit()
-    get_owner_names()
     return book
 
 def delete_book_by_name(delete_name: str):
