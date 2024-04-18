@@ -1,58 +1,102 @@
 from http.client import HTTPException
 from pydantic import ValidationError
+from sqlalchemy import select
+from sqlalchemy.orm import joinedload
 
-from book_management.database import book_storage
-from book_management.book.book import Book, CheckBook
+from book_management.database import Session
+from book_management.schema.book import BookSchema, CheckBook
+from book_management.sql_models.books import Book
+from book_management.sql_models.users import User
+
+def access_db():
+    with Session() as session:
+        statement = select(Book)
+        books_data = session.scalars(statement).all()
+    return books_data
+
+def get_users_db():
+    with Session() as session:
+        statement = select(User)
+        users_data = session.scalars(statement).all()
+    return users_data
+
 
 def get_all_books() -> list[Book]:
-    books_dict = book_storage["books"]
-    try:
-        books  = [Book.model_validate(data) for data in books_dict]
-        for book in books_dict:
-            CheckBook.check_book(book)
-    except ValidationError as er:
-        return er
-    return books
+    books_data = access_db()
+    return [Book(
+        name= book.name,
+        id=book.id,
+        author=book.author,
+        editor=book.editor,
+        price=book.price,
+        owner_email=book.owner_email,
+        status=book.status
+    )
+    for book in books_data
+    ]
 
 def get_number_of_books():
-    books_dict = book_storage["books"]
-    try:
-        books  = [Book.model_validate(data) for data in books_dict]
-        for book in books_dict:
-            CheckBook.check_book(book)
-    except ValidationError as er:
-        return er
-    length = len(books)
+    books_data = access_db()
+    length = len(books_data)
     if length == 0:
         return f'The shelf is empty!'
     elif length == 1:
         return f'There is {length} book on the shelf!'
     return f'There are {length} books on the shelf!'
 
-def add_book(new_book: Book):
-    book_storage["books"].append(new_book)
-    return new_book
+def add_book(new_book: BookSchema):
+    with Session() as session:
+        book = Book(name= new_book.name,
+                    id= new_book.id,
+                    author= new_book.author,
+                    editor=new_book.editor,
+                    price=new_book.price,
+                    owner_email=new_book.owner_email,
+                    status= new_book.status)
+        session.add(book)
+        session.commit()
+    return book
 
-def delete_book_by_name(name: str):
-    book_not_found = True 
-    books = book_storage["books"]
-    for i, book in enumerate(books):
-        if book['name'] == name:
-            book_not_found = False
-            books.pop(i)
-    if book_not_found:
-        return None
-    else:
-        return books
+def delete_book_by_name(delete_name: str):
+    with Session() as session:
+        statement = select(Book).filter_by(name=delete_name)
+        user = session.scalars(statement).one()
+
+        session.delete(user)
+        session.commit()
     
-def edit_book(book_to_edit: str, book: Book):
-    delete_book_by_name(book_to_edit)
-    add_book(book.model_dump())
-    return book_storage
+def edit_book(book_to_edit: str, book: BookSchema):
+    with Session() as session:
+        statement = select(Book).filter_by(name= book_to_edit)
+        new_book = session.scalars(statement).one()
 
-def get_book_by_name(book_name: str):
-    books = book_storage["books"]
-    for book in books:
-        if book['name'] == book_name:
-            return book
-    return None
+        new_book.name = book.name
+        new_book.id = book.id
+        new_book.author = book.author
+        new_book.editor = book.editor
+        new_book.price = book.price
+        new_book.owner_email = book.owner_email
+        new_book.status = book.status
+
+        session.commit()
+
+def sell_unsell_book(book_name:str):
+    with Session() as session:
+        statement = select(Book).filter_by(name= book_name)
+        new_book = session.scalars(statement).one()
+
+        if new_book.status == "sold":
+            new_book.status = "available"
+        else:
+            new_book.status = "sold"
+
+        session.commit()
+
+def change_price(book_name:str, price:str):
+    with Session() as session:
+        statement = select(Book).filter_by(name= book_name)
+        new_book = session.scalars(statement).one()
+        
+        new_book.price = price
+
+        session.commit()

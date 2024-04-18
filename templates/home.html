@@ -1,0 +1,45 @@
+{% extends "empty_page.html" %}
+{% from "my_macro.html" import show_book_home %}
+{% from "my_macro.html" import show_book_count %}
+
+{% block content %}
+<div class="container">
+    <h2>My Library Server</h2>
+    <h3>Welcome to my Library!</h3>
+</div>
+
+<div class="btn">
+    <a class="btn btn-outline-success mx-4" href="/users/login">Log In</a>
+    <a class="btn btn-outline-success mx-4" href="/users/create">Create Account</a>
+</div>
+
+
+<div class="container">
+    <table class="table">
+        <tr>
+            <th>Name</th>
+            <th>Id</th>
+            <th>Author</th>
+            <th>Editor</th>
+            <th>Price</th>
+            <th>Owner Name</th>
+            <th>Owner Firstname</th>
+        </tr>
+        {% set number_books = namespace(value=0) %}
+        {% for book in books %}
+            {% if book.status == "available" %}
+            {% set number_books.value = number_books.value + 1 %}
+                {{ show_book_home(book.name, book.id, book.author, book.editor, book.price, book.owner_email, users) }}
+            {% endif %} 
+        {% endfor %}
+    </table> 
+    
+    {% if number_books.value == 1%}
+    <p>There is 1 book on the shelf!</p>
+    {% endif %}
+    {% if number_books.value != 1%}
+     <p>There are {{number_books.value}} books on the shelf!</p>
+    {% endif %}
+</div>
+
+{% endblock %}

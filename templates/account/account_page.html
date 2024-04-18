@@ -1,0 +1,66 @@
+{% extends "empty_page.html" %}
+
+{% block content %}
+
+<div class="container">
+    {% if active_user is not none %}
+    <h2>Active User: {{ active_user.name }} {{active_user.firstname}}</h2>
+    {% endif %}
+
+    <table class="table">
+        <tr>
+            <th>{{ active_user.email }}</th>
+            <th>{{ active_user.name }}</th>
+            <th>{{ active_user.firstname }}</th>
+        </tr>
+    </table>
+    <h2>Change Password</h2>
+    <form action="/users/change/password" method="post">
+
+        <div class="form-group">
+            <label for="old_password">Current Password</label>
+            <input type="password" class="form-control" id="old_password" name="old_password" placeholder="password" />
+        </div>
+
+        <div class="form-group">
+            <label for="new_password">New Password</label>
+            <input type="password" class="form-control" id="password" name="password" placeholder="password" />
+        </div>
+
+        <div class="form-group">
+            <label for="new_password">Confirmation Password</label>
+            <input type="password" class="form-control" id="password" name="check_password" placeholder="password" />
+        </div>
+
+        <button type="submit" class="btn btn-success my-4">Change Password</button>
+
+    </form>
+    <h2>Change User Information</h2>
+    <form action="/users/change/information" method="post">
+
+        <div class="form-group">
+            <label for="new_email">New Email</label>
+            <input type="text" class="form-control" id="email" name="email" placeholder="admin@email.com" />
+        </div>
+
+        <div class="form-group">
+            <label for="new_name">New Name</label>
+            <input type="text" class="form-control" id="name" name="name" placeholder="name" />
+        </div>
+
+        <div class="form-group">
+            <label for="new_firstname">New Name</label>
+            <input type="text" class="form-control" id="firstname" name="firstname" placeholder="firstname" />
+        </div>
+
+        <button type="submit" class="btn btn-success my-4">Change Information</button>
+
+    </form>
+</div>
+
+<div>
+    <a class="btn btn-outline-success mx-4" href="/books/all">Back</a>
+    <a class="btn btn-outline-success mx-4" href="/users/logout">Log Out</a>
+</div>
+
+{% endblock %}

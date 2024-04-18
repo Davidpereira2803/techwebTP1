@@ -1,4 +1,56 @@
-{% macro show_book(name, id, author, editor) %}
+{% macro show_book(name, id, author, editor, price, owner_email, status) %}
+    <tr>
+        <td>
+            {{ name }}
+        </td>
+        <td>
+            {{ id }}
+        </td>
+        <td>
+            {{ author }}
+        </td>
+        <td>
+            {{ editor }}
+        </td>
+        <td>
+            {{ price }}
+        </td>
+        <td>
+            {{owner_email}}
+        </td>
+        <td>
+            {{ status }}
+        </td>
+    </tr>
+{% endmacro %}
+
+{% macro show_book_count(count)%}
+    <p> {{ count }}</p>
+{% endmacro %}
+
+{% macro show_user(email, name, firstname, role, access) %}
+<tr>
+    <td>{{ email }}</td>
+    
+    <td>
+        {{ name }}
+    </td>
+
+    <td>
+        {{ firstname }}
+    </td>
+
+    <td>
+        {{ role }}
+    </td>
+
+    <td>
+        {{ access }}
+    </td>
+</tr>
+{% endmacro %}
+
+{% macro show_book_home(name, id, author, editor, price,owner_email,users) %}
     <tr>
         <td>{{ name }}</td>
         
@@ -12,9 +64,66 @@
         <td>
             {{ editor }}
         </td>
+        <td>
+            {{ price }}
+        </td>
+        <td>
+            {% for user in users %}
+                {%if user.email == owner_email%}
+                    {{user.name}}
+                {%endif%}
+            {% endfor %}
+        </td>
+        <td>
+            {% for user in users %}
+                {%if user.email == owner_email%}
+                    {{user.firstname}}
+                {%endif%}
+            {% endfor %}
+        </td>
+
     </tr>
 {% endmacro %}
 
-{% macro show_book_count(count)%}
-    <p> {{ count }}</p>
+{% macro show_my_book(name, id, author, editor, price, status, active_user) %}
+    <tr>
+        <td>
+            {{ name }}
+        </td>
+        <td>
+            {{ id }}
+        </td>
+        <td>
+            {{ author }}
+        </td>
+        <td>
+            {{ editor }}
+        </td>
+        <td>
+            {{ price }}
+        </td>
+        <td>
+            {{ status }}
+        </td>
+        <td>
+            {{ active_user.name }}
+        </td>
+        <td>
+            {{active_user.firstname}}
+        </td>
+        <td>                
+            <form action="/books/sell" method="post">
+                <input type="hidden" class="form-control" id="book_status" name="book_name" value="{{name}}"/>
+                <button type="submit" class="btn btn-success my-4">Change</button>
+            </form>
+        </td>
+        <td>                
+            <form action="/books/change/price" method="post">
+                <input type="hidden" class="form-control" id="book_status" name="book_name" value="{{name}}"/>
+                <input type="text" class="form-control" id="book_price" name="price" placeholder="10"/>
+                <button type="submit" class="btn btn-success my-4">Change</button>
+            </form>
+        </td>
+    </tr>
+
 {% endmacro %}
