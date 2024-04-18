@@ -81,29 +81,6 @@ def edit_book(book_to_edit: str, book: BookSchema):
 
         session.commit()
 
-
-def get_owner_names():
-    name = []
-    books = access_db()
-    users = get_users_db()
-
-    for book in books:
-        for user in users:
-            if book.owner_email == user.email:
-                name.append(user.name)
-    return name
-
-def get_owner_firstnames():
-    firstname = []
-    books = access_db()
-    users = get_users_db()
-
-    for book in books:
-        for user in users:
-            if book.owner_email == user.email:
-                firstname.append(user.firstname)
-    return firstname
-
 def sell_unsell_book(book_name:str):
     with Session() as session:
         statement = select(Book).filter_by(name= book_name)

@@ -97,11 +97,10 @@ def create_account(email: Annotated[str, Form()],name: Annotated[str, Form()], f
 def ask_to_go_home(request: Request):
     books = book_services.get_all_books()
     count = book_services.get_number_of_books()
-    owner_names = book_services.get_owner_names()
-    owner_firstnames = book_services.get_owner_firstnames()
+    users = services.access_db()
     return templates.TemplateResponse(
         "home.html",
-        context={'request': request,'books': books, 'count': count, 'owner_names':owner_names, 'owner_firstnames': owner_firstnames}
+        context={'request': request,'books': books, 'count': count, 'users': users}
     )
 
 @login_router.get('/change')
@@ -167,10 +166,8 @@ def revoke(email: Annotated[str, Form()]):
 @login_router.get('/mybooks')
 def get_mybooks(request: Request, user: UserSchema = Depends(manager.optional)):
     books = book_services.get_all_books()
-    owner_names = book_services.get_owner_names()
-    owner_firstnames = book_services.get_owner_firstnames()
     return templates.TemplateResponse(
         "account/my_books.html",
-        context={'request': request, 'active_user': user, 'books': books, 'owner_names':owner_names, 'owner_firstnames': owner_firstnames}
+        context={'request': request, 'active_user': user, 'books': books}
     )
      

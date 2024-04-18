@@ -50,7 +50,7 @@
 </tr>
 {% endmacro %}
 
-{% macro show_book_home(name, id, author, editor, price, owner_names, owner_firstnames) %}
+{% macro show_book_home(name, id, author, editor, price,owner_email,users) %}
     <tr>
         <td>{{ name }}</td>
         
@@ -68,13 +68,17 @@
             {{ price }}
         </td>
         <td>
-            {% for name in owner_names %}
-                {{name}}
+            {% for user in users %}
+                {%if user.email == owner_email%}
+                    {{user.name}}
+                {%endif%}
             {% endfor %}
         </td>
         <td>
-            {% for firstname in owner_firstnames %}
-                {{firstname}}  
+            {% for user in users %}
+                {%if user.email == owner_email%}
+                    {{user.firstname}}
+                {%endif%}
             {% endfor %}
         </td>
 

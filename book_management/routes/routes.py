@@ -92,11 +92,6 @@ def edit(book_name: Annotated[str, Form()], name: Annotated[str, Form()], id: An
         'owner_email':owner_email,
         'status':status
     }
-    # if services.get_book_by_name(book_name) == None:    
-    #    raise HTTPException(
-    #        status_code=status.HTTP_404_NOT_FOUND,
-    #        detail="No book found with this NAME!",
-    #    )
     try:
         book = BookSchema.model_validate(new_book)
         if CheckBook.check_book(new_book) is None:
