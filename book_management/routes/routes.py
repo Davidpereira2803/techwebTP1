@@ -2,6 +2,7 @@ from fastapi import APIRouter, HTTPException, status, Request, Form, Depends
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 from pydantic import ValidationError
+from sqlalchemy.exc import NoResultFound
 
 from typing import Annotated
 
@@ -66,12 +67,14 @@ def ask_to_delete_book(request: Request):
 
 @router.post('/delete')
 def delete_book_by_name(book_name: Annotated[str, Form()]):
-    updated_book_storage = services.delete_book_by_name(book_name)
-    if updated_book_storage is not None:
-        raise HTTPException(
+    try:
+        services.delete_book_by_name(book_name)
+    except NoResultFound:
+        raise HTTPException(       
             status_code=status.HTTP_404_NOT_FOUND,
-            detail="No book found with this NAME!",
+            detail="No book found with this name!",
         )
+    
     return RedirectResponse(url="/books/all", status_code=302)
 
 @router.get('/edit')
@@ -82,7 +85,7 @@ def ask_to_edit_book(request: Request):
     )
 
 @router.post('/edit')
-def edit(book_name: Annotated[str, Form()], name: Annotated[str, Form()], id: Annotated[str, Form()], author: Annotated[str, Form()], editor: Annotated[str, Form()], price: Annotated[str, Form()], owner_email: Annotated[str, Form()], status: Annotated[str, Form()]):
+def edit(book_name: Annotated[str, Form()], name: Annotated[str, Form()], id: Annotated[str, Form()], author: Annotated[str, Form()], editor: Annotated[str, Form()], price: Annotated[str, Form()], owner_email: Annotated[str, Form()], book_status: Annotated[str, Form()]):
     new_book = {
         'name': name,
         'id': id,
@@ -90,7 +93,7 @@ def edit(book_name: Annotated[str, Form()], name: Annotated[str, Form()], id: An
         'editor': editor,
         'price':price,
         'owner_email':owner_email,
-        'status':status
+        'status': book_status
     }
     try:
         book = BookSchema.model_validate(new_book)
@@ -104,7 +107,15 @@ def edit(book_name: Annotated[str, Form()], name: Annotated[str, Form()], id: An
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Invalid book!",
         )
-    services.edit_book(book_name, book)
+    
+    try:
+        services.edit_book(book_name, book)
+    except NoResultFound:
+        raise HTTPException(       
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Book not found!",
+        )
+    
     return RedirectResponse(url="/books/all", status_code=302)
 
 @router.post('/sell')
