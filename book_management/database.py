@@ -11,9 +11,6 @@ Session = sessionmaker(engine)
 class Base(DeclarativeBase):
     pass
 
-from book_management.sql_models.books import Book
-from book_management.sql_models.users import User
-
 def create_database():
     Base.metadata.create_all(engine)
 

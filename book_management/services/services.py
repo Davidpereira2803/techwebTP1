@@ -20,7 +20,6 @@ def get_users_db():
         users_data = session.scalars(statement).all()
     return users_data
 
-
 def get_all_books() -> list[Book]:
     books_data = access_db()
     return [Book(

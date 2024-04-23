@@ -90,7 +90,7 @@ def block_user(user: UserSchema):
 
         session.commit()
 
-def unblock_user(user: User):
+def unblock_user(user: UserSchema):
     with Session() as session:
         statement = select(User).filter_by(name=user.name)
         edit_user = session.scalars(statement).one()

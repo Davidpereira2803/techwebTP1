@@ -1,11 +1,11 @@
 # TP
-The project is structured like the following:
+Le projet est structuré comme ceci:
 
 ```
 techwebtp1/  
 |  
 ├── book_management/  
-|   ├── book/  
+|   ├── schema/  
 |   |   ├── book.py
 │   │   └── user.py  
 │   ├── routes/  
@@ -14,9 +14,16 @@ techwebtp1/
 │   ├── services/ 
 |   |   ├── services.py 
 │   │   └── users_services.py  
+|   ├── sql_models/
+|   |   ├── books.py
+|   |   └── users.py
 |   ├── database.py  
 |   ├── login.py
 │   └── app.py  
+|
+|
+├── data/
+|   └── db.sqlite
 |
 ├── static/
 |   └── style.css
@@ -24,7 +31,8 @@ techwebtp1/
 ├── templates/
 |   ├── account/
 |   |   ├── account_page.html
-|   |   └── dashboard.html
+|   |   ├── dashboard.html
+|   |   └── my_books.html
 |   ├── authentication/
 |   |   ├── create.html
 |   |   └── login.html
@@ -66,12 +74,17 @@ POST:
         -> delete_book_by_name(book_name: Annotated[str, Form()])
     -> '/edit'
         -> edit(book_name: Annotated[str, Form()], name: Annotated[str, Form()], id: Annotated[str, Form()], author: Annotated[str, Form()], editor: Annotated[str, Form()])
+    -> '/sell'
+        -> sell(book_name: Annotated[str, Form()])
+    -> '/change/price'
+        -> sell(book_name: Annotated[str, Form()], price: Annotated[str, Form()])
+
 ```   
 ## Voila les routes HTTP du projet des utilisateurs:
 ```
 GET:
     -> '/me'
-        -> current_user_route(user: User = Depends(manager))
+        -> current_user_route(user: UserSchema = Depends(manager))
     -> '/login'
         -> ask_to_login(request: Request)
     -> '/create'
@@ -82,6 +95,8 @@ GET:
         -> ask_to_change_password(request: Request)
     -> '/dashboard'
         -> ask_to_dashboard(request: Request)
+    -> '/mybooks'
+        -> get_mybooks(request: Request, user: UserSchema = Depends(manager.optional))
 POST:
     -> '/login'
         -> login_route(email: Annotated[str, Form()],password: Annotated[str, Form()])
@@ -89,8 +104,10 @@ POST:
         -> logout_route()
     -> '/create'
         -> create_account(email: Annotated[str, Form()],name: Annotated[str, Form()], firstname: Annotated[str, Form()], password: Annotated[str, Form()], password_check: Annotated[str, Form()])
-    -> '/change'
-        -> change_password(password: Annotated[str, Form()], user: User = Depends(manager.optional))
+    -> '/change/password'
+        -> change_password(password: Annotated[str, Form()], user: UserSchema = Depends(manager.optional))
+    -> '/change/information'
+        -> change_information(email: Annotated[str, Form()], name: Annotated[str, Form()],firstname: Annotated[str, Form()],user: UserSchema = Depends(manager.optional))
     -> '/block'
         -> block_user(email: Annotated[str, Form()])
     -> '/unblock'
@@ -130,13 +147,22 @@ ask_to_edit_book(request: Request)
 # Editer un livre de la librarie avec le nom du parametre book_name
 # Parameter: book_name, name, id, author, editor
 def edit(book_name: Annotated[str, Form()], name: Annotated[str, Form()], id: Annotated[str, Form()], author: Annotated[str, Form()], editor: Annotated[str, Form()])
+
+# Changer le status du livre avec le nom passer comme parametre
+# Parameter: book_name
+def sell(book_name: Annotated[str, Form()])
+
+# Changer le prix du livre avec le nom passer comme parametre
+# Parameter: book_name, price
+def sell(book_name: Annotated[str, Form()], price: Annotated[str, Form()])
+
 ```
 
 ## Voici les fonctions des routes(GET,POST) pour les utilisateurs
 ```
 # Get l'utilisateur actuel
 # Parameter: user
-def current_user_route(user: User = Depends(manager)):
+def current_user_route(user: UserSchema = Depends(manager)):
 
 # Demande pour un login
 # Parameter: request
@@ -164,15 +190,19 @@ def ask_to_go_home(request: Request):
 
 # Demande pour changer le password de l'utilisateur actuel
 # Parameter: request, user
-def ask_to_change_password(request: Request, user: User = Depends(manager.optional)):
+def ask_to_change_password(request: Request, user: UserSchema = Depends(manager.optional)):
 
 # Changement du password de l'utilisateur actuel
 # Parameter: password, user
-def change_password(password: Annotated[str, Form()], user: User = Depends(manager.optional)):
+def change_password(password: Annotated[str, Form()], user: UserSchema = Depends(manager.optional)):
+
+# Changer les informations personnelles du compte ( email, nom, prénom)
+# Parameter: email, name, firstname, user
+def change_information(email: Annotated[str, Form()], name: Annotated[str, Form()],firstname: Annotated[str, Form()],user: UserSchema = Depends(manager.optional))
 
 # Demande pour aller sur la page dashboard
 # Parameter: request, user
-def ask_to_dashboard(request: Request, user: User = Depends(manager.optional)):
+def ask_to_dashboard(request: Request, user: UserSchema = Depends(manager.optional)):
 
 # Bloquer un utilisateur
 # Parameter: email
@@ -191,9 +221,17 @@ def promote(email: Annotated[str, Form()]):
 def revoke(email: Annotated[str, Form()]):
 ```
 
-# Functions related to the services
+# Fonctions en relations avec les services
 ## Pour les livres
 ```
+# Acceder aux livres de la database
+# Parameter: /
+def access_db():
+
+# Acceder aux utilisateurs de la database
+# Parameter: /
+def get_users_db():
+
 # Get tout les livres de la database et return une liste de livre
 # Parameter: /
 get_all_books() -> list[Book]:
@@ -214,13 +252,22 @@ delete_book_by_name(name: str):
 # Parameter: book_to_edit, book
 edit_book(book_to_edit: str, book: Book):
 
-# Get le livre avec le nom passer comme paramtere
+# Changer le status du livre(sold/unavailable) avec le nom passer comme paramètre
 # Parameter: book_name
-get_book_by_name(book_name: str):
+def sell_unsell_book(book_name:str):
+
+# Changer le prix du livre avec le nom passer comme paramètre
+# Parameter: book_name
+def change_price(book_name:str, price:str):
+
 ```
 
 ## Pour les utilisateurs
 ```
+# Acceder aux utilisateur de la database
+# Parameter: /
+def access_db()
+
 # Obtenir un utilisateur par le nom
 # Parameter: name
 def get_user_by_name(name: str):
@@ -238,12 +285,16 @@ def get_user_by_email(email: str):
 def add_user(new_user: User):
 
 # Changer le role d'un utilisateur
-# Parameter: admin, user
-def change_role(admin: User, user: User):
+# Parameter: user
+def change_role(user: UserSchema):
 
-# Changer le password de l'utilisateur
-# Parameter: user, password
-def change_password(user: User, password):
+# Changer le password de l'utilisateur avec un controle du password actuel
+# Parameter: user, password, check_password
+def change_password(user: User, password, check_password):
+
+# Changer les information de l'utilisateur (email, name, firstname)
+# Parameter: user, email, firstname, name
+def change_information(user: UserSchema, email, firstname, name):
 
 # Compter les utilisateurs dans la database
 # Parameter: /
@@ -251,19 +302,19 @@ def count_users():
 
 # Bloquer l'utilisateur passer comme paramètre
 # Parameter: user
-def block_user(user: User):
+def block_user(user: UserSchema):
 
 # Débloquer l'utilisateur passer comme paramètre
 # Parameter: user
-def unblock_user(user: User):
+def unblock_user(user: UserSchema):
 
 # Promouvoir l'utilisateur passer comme paramètre
 # Parameter: user
-def promote_user(user: User):
+def promote_user(user: UserSchema):
 
 # Limoger l'utilisateur passer comme paramètre
 # Parameter: user
-def revoke_user(user: User):
+def revoke_user(user: UserSchema):
 
 # Supprimer l'utilisateur avec l'email passer comme paramètre
 # Paramter: email
@@ -283,6 +334,10 @@ Contient le skeleton de la page du compte de l'utilisateur, l'utilisateur peut c
 ## dashboard.html
 
 Contient le skeleton de la page dashboard pour l'admin, ou il peut voir tout les utilisateurs, les bloquer/débloquer et changer les roles
+
+## my_books.html
+
+Contient le skeleton de la page my books pour chaque utilisateur, la page contient tous les livres de l'utilisateur actuel. Il peut changer le status du livre (sold/available) et changer le prix du livre
 ```
 
 ## authentication
@@ -349,8 +404,30 @@ Contient le skeleton HTML de la page d'acceuil
 
 ## my_macro.html
 
-Contient le macro pour show_book et show_book_count, pour montrer les valeurs des livres dans la database et le nombre de livres dans la database
+Contient le macro pour 'show_book(name, id, author, editor, price, owner-email, status)', 'show_book_count(count)', 'show_user(email, name, firstname, role, access)', 'show_book_home(name, id, author, editor, price, owner_email, users)', 'show_my_book(name, id, author, editor, price, status, active_user)' pour montrer les valeurs des livres dans la database et le nombre de livres dans la database, ainsi que les utilisateurs. Les pages my_books.html et home.html on une macro pour faciliter de montrer les données de la database avec des contraintes plus spécifique.
 ```
+
+# Schema
+Le repertoire schema contient les fichiers book.py et user.py, qui définissent les livres et les utilisateurs, par exemple ils définissent que l'utilisateur a un nom, prénom...
+
+Dans le fichier book.py on a la classe BookSchema qui définit les livres et la classe CheckBook, qui controle que certaines données ne sont pas que des espaces vides.
+
+# SQL Models
+Le repertoire sql_models contient les fichiers books.py et users.py qui définissent comment les livres et les utilisateurs sont définies dans la database en SQLite.
+
+# Autres fichiers
+
+## app.py
+Ce fichier est responsable pour réagir en cas d'erreurs HTTP et de définir au programme ou les services, routes, templates... sont dans les repertoires.
+
+## database.py
+Ce fichier est responable pour créer l'engine afin de créer la database et de pouvoir l'acceder.
+
+## login.py
+Ce fichier est responsable pour lancer le LoginManager afin de savoir quel utilisateur est login.
+
+## main.py
+Ce fichier est responsable que pour le lancement du server.
 
 # Description
 
@@ -367,3 +444,16 @@ Cette version du programme est une nouvelle iteration du TP1, toutes les fonctio
 ## Third Iteration
 
 Cette version du programme implemente des utilisateur, le but est d'avoir un ou plusieurs administrateurs qui peuvent ajouter, supprimer et editer des livres, et des client qui peuvent voir les livres qui sont dans la librarie. Les administrateurs peuvent aussi bloquer/debloquer des utilisateur et les promouvoir ou limoger. Chaque utilisateur a des informations personnelles tels que l'email, mot de passe nom et prenom, mais le programme leur donne aussi automatiquement un role et un access à la librarie. Chaque utilisateur peut changer leurs mot de passe dans la page account. Les pages d'erreurs montrent les erreurs avec un petit message adapte pour que les utilisateurs sachent ce qu'ils on fait de faut. 
+
+
+## Fourth Iteration
+
+Dans cette version du programme on implemente une database avec _SQLite_, pour faire cela quelques changement ont du été fait au fonctionalitées des iteration précédentes, afin d'accéder et changer les données de la database. De plus les livres on un prix, un status (sold/available) et un propriétaire (dont l'email est stocké avec le livre).
+
+Chaque utilisateur a ces propres livres et peut changer le prix et le status du livre dans la page _My Books_, seul les administrateurs peuvent additioner, editer et supprimer par complet les livres. 
+
+Chaque utilisateur peut acceder leurs informations de compte dans la page _Account_ et même changer quelques données. Ils peuvent changer leurs mot de passe on donnant le mot de passe actuel, et changer l'email, le nom et le prénom.
+
+Sur la page _Home_ tous le monde peut voir les livres qui n'ont pas encore été vendus, sans se connecter. Après s'avoir connecté les utilisateurs ne verront que les livres qui n'ont pas le status de vendu.
+
+
