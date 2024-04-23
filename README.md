@@ -1,11 +1,11 @@
 # TP
-The project is structured like the following:
+Le projet est structuré comme ceci:
 
 ```
 techwebtp1/  
 |  
 ├── book_management/  
-|   ├── book/  
+|   ├── schema/  
 |   |   ├── book.py
 │   │   └── user.py  
 │   ├── routes/  
@@ -14,9 +14,16 @@ techwebtp1/
 │   ├── services/ 
 |   |   ├── services.py 
 │   │   └── users_services.py  
+|   ├── sql_models/
+|   |   ├── books.py
+|   |   └── users.py
 |   ├── database.py  
 |   ├── login.py
 │   └── app.py  
+|
+|
+├── data/
+|   └── db.sqlite
 |
 ├── static/
 |   └── style.css
@@ -24,7 +31,8 @@ techwebtp1/
 ├── templates/
 |   ├── account/
 |   |   ├── account_page.html
-|   |   └── dashboard.html
+|   |   ├── dashboard.html
+|   |   └── my_books.html
 |   ├── authentication/
 |   |   ├── create.html
 |   |   └── login.html
@@ -191,7 +199,7 @@ def promote(email: Annotated[str, Form()]):
 def revoke(email: Annotated[str, Form()]):
 ```
 
-# Functions related to the services
+# Fonctions en relations avec les services
 ## Pour les livres
 ```
 # Get tout les livres de la database et return une liste de livre
@@ -283,6 +291,10 @@ Contient le skeleton de la page du compte de l'utilisateur, l'utilisateur peut c
 ## dashboard.html
 
 Contient le skeleton de la page dashboard pour l'admin, ou il peut voir tout les utilisateurs, les bloquer/débloquer et changer les roles
+
+## my_books.html
+
+Contient le skeleton de la page my books pour chaque utilisateur, la page contient tous les livres de l'utilisateur actuel. Il peut changer le status du livre (sold/available) et changer le prix du livre
 ```
 
 ## authentication
@@ -349,7 +361,7 @@ Contient le skeleton HTML de la page d'acceuil
 
 ## my_macro.html
 
-Contient le macro pour show_book et show_book_count, pour montrer les valeurs des livres dans la database et le nombre de livres dans la database
+Contient le macro pour 'show_book(name, id, author, editor, price, owner-email, status)', 'show_book_count(count)', 'show_user(email, name, firstname, role, access)', 'show_book_home(name, id, author, editor, price, owner_email, users)', 'show_my_book(name, id, author, editor, price, status, active_user)' pour montrer les valeurs des livres dans la database et le nombre de livres dans la database, ainsi que les utilisateurs. Les pages my_books.html et home.html on une macro pour faciliter de montrer les données de la database avec des contraintes plus spécifique.
 ```
 
 # Description
@@ -367,3 +379,14 @@ Cette version du programme est une nouvelle iteration du TP1, toutes les fonctio
 ## Third Iteration
 
 Cette version du programme implemente des utilisateur, le but est d'avoir un ou plusieurs administrateurs qui peuvent ajouter, supprimer et editer des livres, et des client qui peuvent voir les livres qui sont dans la librarie. Les administrateurs peuvent aussi bloquer/debloquer des utilisateur et les promouvoir ou limoger. Chaque utilisateur a des informations personnelles tels que l'email, mot de passe nom et prenom, mais le programme leur donne aussi automatiquement un role et un access à la librarie. Chaque utilisateur peut changer leurs mot de passe dans la page account. Les pages d'erreurs montrent les erreurs avec un petit message adapte pour que les utilisateurs sachent ce qu'ils on fait de faut. 
+
+
+## Fourth Iteration
+
+Dans cette version du programme on implemente une database avec _SQLite_, pour faire cela quelques changement ont du été fait au fonctionalitées des iteration précédentes, afin d'accéder et changer les données de la database. De plus les livres on un prix, un status (sold/available) et un propriétaire (dont l'email est stocké avec le livre).
+
+Chaque utilisateur a ces propres livres et peut changer le prix et le status du livre dans la page _My Books_, seul les administrateurs peuvent additioner, editer et supprimer par complet les livres. 
+
+Chaque utilisateur peut acceder leurs informations de compte dans la page _Account_ et même changer quelques données. Ils peuvent changer leurs mot de passe on donnant le mot de passe actuel, et changer l'email, le nom et le prénom.
+
+
