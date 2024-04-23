@@ -74,6 +74,11 @@ POST:
         -> delete_book_by_name(book_name: Annotated[str, Form()])
     -> '/edit'
         -> edit(book_name: Annotated[str, Form()], name: Annotated[str, Form()], id: Annotated[str, Form()], author: Annotated[str, Form()], editor: Annotated[str, Form()])
+    -> '/sell'
+        -> `sell(book_name: Annotated[str, Form()])`
+    -> '/change/price'
+        -> sell(book_name: Annotated[str, Form()], price: Annotated[str, Form()])
+
 ```   
 ## Voila les routes HTTP du projet des utilisateurs:
 ```
@@ -388,5 +393,7 @@ Dans cette version du programme on implemente une database avec _SQLite_, pour f
 Chaque utilisateur a ces propres livres et peut changer le prix et le status du livre dans la page _My Books_, seul les administrateurs peuvent additioner, editer et supprimer par complet les livres. 
 
 Chaque utilisateur peut acceder leurs informations de compte dans la page _Account_ et même changer quelques données. Ils peuvent changer leurs mot de passe on donnant le mot de passe actuel, et changer l'email, le nom et le prénom.
+
+Sur la page _Home_ tous le monde peut voir les livres qui n'ont pas encore été vendus, sans se connecter. Après s'avoir connecté les utilisateurs ne verront que les livres qui n'ont pas le status de vendu.
 
 
